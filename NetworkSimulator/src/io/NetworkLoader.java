@@ -9,15 +9,13 @@ import networking.Network;
 public class NetworkLoader {
 	public Network loadNetwork(String filename) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(filename));
-		String[] line = br.readLine().split(" ");
-		int[] output = new int[line.length];
+		String line = "";
 		
-		for(int i = 0; i < line.length; i++) {
-			output[i] = Integer.parseInt(line[i]);
+		while((line = br.readLine()) != null) {
+			
 		}
 		
 		br.close();
-		// test 2
 		return null;
 	}
 }
