@@ -21,6 +21,14 @@ public class Network {
 	}
 	
 	public void draw(Graphics g, int w, int h) {
-		
+		for(Link l : links) {
+			l.draw(g);
+		}
+		for(Device d : devices) {
+			d.draw(g);
+		}
+		for(Flow f : flows) {
+			f.draw(g);
+		}
 	}
 }

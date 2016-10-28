@@ -1,5 +1,7 @@
 package networking;
 
+import java.awt.Graphics;
+
 public class Flow {
 	String addr1, addr2, packetSize, window;
 	
@@ -8,5 +10,10 @@ public class Flow {
 		this.addr2 = addr2;
 		this.packetSize = packetSize;
 		this.window = window;
+	}
+
+	public void draw(Graphics g) {
+		// TODO Auto-generated method stub
+		
 	}
 }

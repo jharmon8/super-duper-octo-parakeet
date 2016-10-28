@@ -1,5 +1,6 @@
 package networking;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -7,7 +8,6 @@ import java.util.ArrayList;
 public class Host extends Device {
 	private Link link; // this might be removed
 	private String hostname;
-	private int x, y;
 	
 	public Host(String addr, String x, String y, String hostname) {
 		// TODO Auto-generated constructor stub
@@ -40,7 +40,9 @@ public class Host extends Device {
 	@Override
 	public boolean addLink(Link l) {
 		// TODO Auto-generated method stub
-		return false;
+		if(link != null) {return false;}
+		this.link = l;
+		return true;
 	}
 
 	@Override
@@ -61,7 +63,10 @@ public class Host extends Device {
 	@Override
 	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
-		
+		int size = 10;
+		g.setColor(Color.BLUE);
+		g.fillOval(x - size/2, y - size/2, size, size);
+		g.drawChars(addr.toCharArray(), 0, addr.length(), x, y + 2 * size);
 	}
 
 }

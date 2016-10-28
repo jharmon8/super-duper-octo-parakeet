@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public abstract class Device {
 	public String addr;
+	public int x, y;
 	
 	public Device(String addr) {
 		this.addr = addr;

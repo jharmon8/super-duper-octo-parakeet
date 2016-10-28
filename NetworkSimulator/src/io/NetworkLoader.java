@@ -69,7 +69,19 @@ public class NetworkLoader {
 			// links
 			case 2:
 				split = line.split(" ");
-				Link link = new Link(split[0], split[1], split[2], split[3]);
+				Device d1 = null, d2 = null;
+				for(Device dev : d) {
+					if(split[0].equals(dev.addr)) {
+						d1 = dev;
+					}
+					if(split[1].equals(dev.addr)) {
+						d2 = dev;
+					}
+				}
+				
+				Link link = new Link(d1, d2, split[2], split[3]);
+				d1.addLink(link);
+				d2.addLink(link);
 				l.add(link);
 				break;
 			// flows
