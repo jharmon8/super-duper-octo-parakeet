@@ -1,0 +1,64 @@
+OVERVIEW:
+Networks are text files
+# are comments, blank lines are ignored
+broken into sections delimited by $ that give info
+sections are metadata, devices, links, flows
+
+EXAMPLE:
+# First section (anything before first $) is metadata
+# Maybe have details about granularity of time, desired outputs, etc
+
+# this may say that time is granular to 1 ns (10^-9)
+t: -9
+
+# this indicates next section
+$
+
+# this section is devices. 1 is a host, 2 is a router
+# host format: 1 <address> <graphics_x> <graphics_y> [Hostname]
+1 192.168.1.7 10 10 Alice
+1 192.168.1.8 40 10 Bob
+1 192.168.1.9 25 30 Eve
+
+# router format: 2 <address> <graphics_x> <graphics_y> <congestion_algorithm>
+2 192.168.1.1 25 18 1
+
+# congestion algorithms:
+# 1: none
+# TODO: put more here
+
+$
+
+# this section is links, which is a physical connection between two addresses
+# link format: <address_1> <address_2> <rate_bps> 
+192.168.1.7 192.168.1.1 1000000
+192.168.1.8 192.168.1.1 1000000
+192.168.1.1 192.168.1.9 1000000
+
+$
+
+# this section is flows
+# TODO: I think there needs to be more fields here
+# flow format: <address_1> <address_2> <packet_size> <window>
+192.168.1.7 192.168.1.8 1000 1000
+
+$
+
+anything after the last $ is ignored
+blah blah blah random ASCII art
+ ____________________________________
+|\                                    \
+| \                                    \
+|  \____________________________________\
+|  |       __---_ _---__                |
+|  |      |======|=====|                |
+|  |      |======|=====|                |
+|  |  ____|__---_|_---_|______________  |
+|  | |                                | |
+|   \ \                                \ \
+|  \ ||\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\| |     --Keith Wright
+|  |\  ,--------------------------------  |
+|  ||| |                               || |
+ \ ||| |           -  -                || |
+  \'|| |-----------\\-\\---------------|| |
+    \|_|            "  "               \|_|
