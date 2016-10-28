@@ -5,12 +5,23 @@ import java.util.ArrayList;
 
 
 public class Host extends Device {
-	private Link link;
+	private Link link; // this might be removed
 	private String hostname;
+	private int x, y;
 	
-	public Host(String addr) {
+	public Host(String addr, String x, String y, String hostname) {
 		// TODO Auto-generated constructor stub
 		super(addr);
+		this.x = Integer.parseInt(x);
+		this.y = Integer.parseInt(y);
+		this.hostname = hostname;
+	}
+
+	public Host(String addr, String x, String y) {
+		// TODO Auto-generated constructor stub
+		super(addr);
+		this.x = Integer.parseInt(x);
+		this.y = Integer.parseInt(y);
 		hostname = "<no name>";
 	}
 

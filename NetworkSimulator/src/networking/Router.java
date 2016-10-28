@@ -6,10 +6,14 @@ import java.util.ArrayList;
 
 public class Router extends Device {
 	ArrayList<Link> links = new ArrayList<Link>();
+	private int x, y, congestion;
 	
-	public Router(String addr) {
+	public Router(String addr, String x, String y, String cong) {
 		// TODO Auto-generated constructor stub
 		super(addr);
+		this.x = Integer.parseInt(x);
+		this.y = Integer.parseInt(y);
+		this.congestion = Integer.parseInt(cong);
 	}
 
 	@Override
