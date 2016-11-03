@@ -139,33 +139,37 @@ public class DesignerPanel extends JPanel implements KeyListener, ActionListener
 		}
 		
 		if(e.getButton() == 3) {
-			// find minimum distance
-			double minDistance = devices.get(0).getDistance(e.getX(), e.getY());
-			Device closest = devices.get(0);
-			for(Device d : devices) {
-				double dist = d.getDistance(e.getX(), e.getY());
-				if(dist < minDistance) {
-					minDistance = dist;
-					closest = d;
+			if(devices.size() > 0) {
+				// find minimum distance
+				double minDistance = devices.get(0).getDistance(e.getX(), e.getY());
+				Device closest = devices.get(0);
+				for(Device d : devices) {
+					double dist = d.getDistance(e.getX(), e.getY());
+					if(dist < minDistance) {
+						minDistance = dist;
+						closest = d;
+					}
 				}
-			}
-			
-			if(minDistance > minClickDistance) { // too far
-				selected = null;
-			} else if(selected == null) { // first selection
-				selected = closest;
-			} else { // second selection
-		        JOptionLinkInput newL = new JOptionLinkInput(selected, closest);
-		        JOptionPane.showMessageDialog(
-		        						this, 
-		        						newL, 
-		        						"New Link",
-		        						JOptionPane.QUESTION_MESSAGE);
-		        
-		        Link newLink = newL.getLink();
-		        if(newLink != null) {
-			        links.add(newLink);
-		        }
+				
+				if(minDistance > minClickDistance) { // too far
+					selected = null;
+				} else if(selected == null) { // first selection
+					selected = closest;
+				} else { // second selection
+			        JOptionLinkInput newL = new JOptionLinkInput(selected, closest);
+			        JOptionPane.showMessageDialog(
+			        						this, 
+			        						newL, 
+			        						"New Link",
+			        						JOptionPane.QUESTION_MESSAGE);
+			        
+			        Link newLink = newL.getLink();
+			        if(newLink != null) {
+				        links.add(newLink);
+			        }
+					selected = null;
+				}
+			} else {
 				selected = null;
 			}
 		}
