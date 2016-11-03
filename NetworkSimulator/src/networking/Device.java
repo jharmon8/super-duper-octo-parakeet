@@ -1,5 +1,6 @@
 package networking;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -17,4 +18,18 @@ public abstract class Device {
 	public abstract boolean setLinks(ArrayList<Link> links);
 	public abstract ArrayList<Link> getLinks();
 	public abstract void draw(Graphics g);
+	public abstract boolean isHost();
+
+	public void drawSelection(Graphics g) {
+		int size = 20;
+		g.setColor(Color.BLACK);
+		g.fillOval(x-size/2, y-size/2, size, size);
+	}
+	
+	public double getDistance(int x2, int y2) {
+		int dx = x2 - x;
+		int dy = y2 - y;
+		
+		return Math.sqrt(dx * dx + dy * dy);
+	}
 }

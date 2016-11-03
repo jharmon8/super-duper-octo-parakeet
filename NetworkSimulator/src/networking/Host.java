@@ -17,11 +17,27 @@ public class Host extends Device {
 		this.hostname = hostname;
 	}
 
+	public Host(String addr, int x, int y, String hostname) {
+		// TODO Auto-generated constructor stub
+		super(addr);
+		this.x = x;
+		this.y = y;
+		this.hostname = hostname;
+	}
+
 	public Host(String addr, String x, String y) {
 		// TODO Auto-generated constructor stub
 		super(addr);
 		this.x = Integer.parseInt(x);
 		this.y = Integer.parseInt(y);
+		hostname = "<no name>";
+	}
+
+	public Host(String addr, int x, int y) {
+		// TODO Auto-generated constructor stub
+		super(addr);
+		this.x = x;
+		this.y = y;
 		hostname = "<no name>";
 	}
 
@@ -66,7 +82,14 @@ public class Host extends Device {
 		int size = 10;
 		g.setColor(Color.BLUE);
 		g.fillOval(x - size/2, y - size/2, size, size);
-		g.drawChars(addr.toCharArray(), 0, addr.length(), x, y + 2 * size);
+		g.drawString(addr, x, y + 2 * size);
+		g.drawString(hostname, x, y + 2 * size + 10);
+	}
+
+	@Override
+	public boolean isHost() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 }

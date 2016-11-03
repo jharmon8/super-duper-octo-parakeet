@@ -16,6 +16,14 @@ public class Router extends Device {
 		this.y = Integer.parseInt(y);
 		this.congestion = Integer.parseInt(cong);
 	}
+	
+	public Router(String addr, int x, int y, int cong) {
+		// TODO Auto-generated constructor stub
+		super(addr);
+		this.x = x;
+		this.y = y;
+		this.congestion = cong;
+	}
 
 	@Override
 	public Packet request() {
@@ -55,5 +63,11 @@ public class Router extends Device {
 		g.setColor(Color.RED);
 		g.fillOval(x - size/2, y - size/2, size, size);
 		g.drawChars(addr.toCharArray(), 0, addr.length(), x, y + 2 * size);
+	}
+
+	@Override
+	public boolean isHost() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
