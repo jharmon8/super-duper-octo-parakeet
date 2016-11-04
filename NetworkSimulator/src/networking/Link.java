@@ -31,6 +31,8 @@ public class Link {
 		int midX = (devices[0].x + devices[1].x) / 2;
 		int midY = (devices[0].y + devices[1].y) / 2;
 		
+		g.fillOval(midX - 2, midY - 2, 4, 4);
+		
 		int leftY = devices[0].x < devices[1].x ? devices[0].y : devices[1].y;
 		int rightY = devices[0].x < devices[1].x ? devices[1].y : devices[0].y;
 		
