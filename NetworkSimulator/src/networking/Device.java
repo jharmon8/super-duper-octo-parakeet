@@ -3,6 +3,7 @@ package networking;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 public abstract class Device {
 	public String addr;
@@ -13,10 +14,11 @@ public abstract class Device {
 	}
 	
 	public abstract Packet request();
-	public abstract void route(Packet p);
+	public abstract void route(Packet p, PriorityQueue<Event> q);
 	public abstract boolean addLink(Link l);
 	public abstract boolean setLinks(ArrayList<Link> links);
 	public abstract ArrayList<Link> getLinks();
+	public abstract Link getSingleLink();
 	public abstract void draw(Graphics g);
 	public abstract boolean isHost();
 

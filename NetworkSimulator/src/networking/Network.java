@@ -14,6 +14,7 @@ public class Network {
 	private ArrayList<Flow> flows;
 	
 	private PriorityQueue<Event> q;
+	private int currTime = 0;
 	
 	public Network(int time, ArrayList<Device> d, ArrayList<Link> l, ArrayList<Flow> f) {
 		this.time = time;
@@ -25,8 +26,19 @@ public class Network {
 		q = new PriorityQueue<Event>();
 	}
 	
-	public void tick() {
+	public void init() {
+		execBellmanFord();
 		
+		for(Flow f : flows) {
+			f.init(q);
+		}
+	}
+	
+	public void tick() {
+		Event e = q.peek();
+		currTime = e.endTime;
+		q.remove(e);
+		e.resolve(q);
 	}
 	
 	public void draw(Graphics g, int w, int h) {
@@ -39,5 +51,9 @@ public class Network {
 		for(Flow f : flows) {
 			f.draw(g);
 		}
+	}
+	
+	public int execBellmanFord() {
+		return 0;
 	}
 }

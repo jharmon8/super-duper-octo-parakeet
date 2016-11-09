@@ -18,7 +18,7 @@ public class NetworkSaver {
 	 */
 	public static Network saveNetwork(String filename) throws IOException {
 		// network variables
-		int time = -6;
+/*		int time = -6;
 		ArrayList<Device> d = new ArrayList<Device>();
 		ArrayList<Link> l = new ArrayList<Link>();
 		ArrayList<Flow> f = new ArrayList<Flow>();
@@ -101,6 +101,7 @@ public class NetworkSaver {
 		}
 		
 		br.close();
-		return new Network(time, d, l, f);
+		return new Network(time, d, l, f);*/
+		return null;
 	}
 }

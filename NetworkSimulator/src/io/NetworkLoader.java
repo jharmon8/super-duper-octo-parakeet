@@ -87,7 +87,22 @@ public class NetworkLoader {
 			// flows
 			case 3:
 				split = line.split(" ");
-				Flow flow = new Flow(split[0], split[1], split[2], split[3]);
+				Device source = null, dest = null;
+				for(Device dev : d) {
+					if(dev.addr.equals(split[0])) {
+						source = dev;
+					}
+					if(dev.addr.equals(split[1])) {
+						dest = dev;
+					}
+				}
+				
+				if(source == null || dest == null) {
+					System.err.println("invalid flow: " + line);
+					System.exit(1);
+				}
+				
+				Flow flow = new Flow(source, dest, split[2], split[3]);
 				f.add(flow);
 				break;
 			default:
@@ -97,6 +112,16 @@ public class NetworkLoader {
 		}
 		
 		br.close();
+		
+		// add a reference of each relevant link to each device
+		for(Device dev : d) {
+			for(Link link : l) {
+				if(link.containsDevice(dev)) {
+					dev.addLink(link);
+				}
+			}
+		}
+		
 		return new Network(time, d, l, f);
 	}
 }

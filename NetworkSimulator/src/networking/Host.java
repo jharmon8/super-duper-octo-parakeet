@@ -3,6 +3,7 @@ package networking;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 
 public class Host extends Device {
@@ -47,10 +48,11 @@ public class Host extends Device {
 		return null;
 	}
 
+	// this is really simple for hosts
 	@Override
-	public void route(Packet p) {
+	public void route(Packet p, PriorityQueue<Event> q) {
 		// TODO Auto-generated method stub
-		
+		link.addPacket(this, p, q);
 	}
 
 	@Override
@@ -90,6 +92,12 @@ public class Host extends Device {
 	public boolean isHost() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	@Override
+	public Link getSingleLink() {
+		// TODO Auto-generated method stub
+		return link;
 	}
 
 }
