@@ -8,6 +8,7 @@ import java.util.PriorityQueue;
 
 public class Router extends Device {
 	ArrayList<Link> links = new ArrayList<Link>();
+	ArrayList<>
 	private int congestion;
 	
 	public Router(String addr, String x, String y, String cong) {

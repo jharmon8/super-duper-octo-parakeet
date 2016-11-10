@@ -53,6 +53,7 @@ public class Network {
 		}
 	}
 	
+	// Setup the routing tables
 	public int execBellmanFord() {
 		return 0;
 	}
