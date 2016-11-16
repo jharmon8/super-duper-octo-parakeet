@@ -86,7 +86,7 @@ public class Link {
 		// create the event
 		Event e = new Event(
 				Type.TRANS, 
-				transTime + bufferEndTime, 
+				bufferEndTime, 
 //				this, 
 				this, 
 				p
