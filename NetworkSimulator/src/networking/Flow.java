@@ -40,6 +40,6 @@ public class Flow {
 	// Generate a packet for the source to send
 	// Will be called every time the src has an opportunity to send a packet
 	public Packet getPacket() {
-		return null;
+		return new Packet(packetSize, source);
 	}
 }

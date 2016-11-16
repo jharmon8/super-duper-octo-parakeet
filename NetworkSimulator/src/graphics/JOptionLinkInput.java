@@ -52,7 +52,8 @@ public class JOptionLinkInput extends JPanel {
 				d1, 
 				d2, 
 				r,
-				l
+				l,
+				64
 		);
 	}
 }

@@ -10,7 +10,8 @@ import networking.Event.Type;
 public class Link {
 	//test
 	String addr1, addr2;
-	int rate, latency;
+	// rate in bps, latency in us, maxSize in KB
+	int rate, latency, maxSize;
 	Device[] devices = new Device[2];
 	
 	// the buffer and corresponding sources of each packet
@@ -22,18 +23,20 @@ public class Link {
 	// Used when new packets are added to the buffer and need trans events
 	private int bufferEndTime = 0;
 	
-	public Link(Device d1, Device d2, int rate, int latency) {
+	public Link(Device d1, Device d2, int rate, int latency, int maxSize) {
 		this.devices[0] = d1;
 		this.devices[1] = d2;
 		this.rate = rate;
 		this.latency = latency;
+		this.maxSize = maxSize;
 	}
 	
-	public Link(Device d1, Device d2, String rate, String latency) {
+	public Link(Device d1, Device d2, String rate, String latency, String maxSize) {
 		this.devices[0] = d1;
 		this.devices[1] = d2;
 		this.rate = Integer.parseInt(rate);
 		this.latency = Integer.parseInt(latency);
+		this.maxSize = Integer.parseInt(maxSize);
 	}
 	
 	public boolean containsDevice(Device d) {
@@ -63,15 +66,21 @@ public class Link {
 	}
 	
 	public void addPacket(Device source, Packet p, PriorityQueue<Event> q) {
-		int transTime = p.size / rate;
+		int bufferSaturation = 0;
+		for(Packet packet : buffer) {
+			bufferSaturation += packet.size;
+		}
+		if(bufferSaturation + p.size > maxSize) { return; }
+		
+		int transTime = (p.size / rate) * 1000;
 
 		// if this source is the same as the last packet
-		if(source == sources.get(sources.size() - 1)) {
-			// don't worry about delay
-			bufferEndTime += transTime;
-		} else {
+		if(sources.size() == 0 || source != sources.get(sources.size() - 1)) {
 			// gotta worry about delay
 			bufferEndTime += transTime + latency;
+		} else {
+			// don't worry about delay
+			bufferEndTime += transTime;
 		}
 		
 		// create the event

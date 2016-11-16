@@ -79,7 +79,7 @@ public class NetworkLoader {
 					}
 				}
 				
-				Link link = new Link(d1, d2, split[2], split[3]);
+				Link link = new Link(d1, d2, split[2], split[3], split[4]);
 				d1.addLink(link);
 				d2.addLink(link);
 				l.add(link);

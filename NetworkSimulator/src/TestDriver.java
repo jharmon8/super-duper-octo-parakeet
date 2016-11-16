@@ -8,16 +8,25 @@ import networking.*;
 
 public class TestDriver {
 	public static void main(String[] args) throws IOException {
-		testDesignerViewer();
+		testCaseNeg1();
 	}
 	
 	public static void testNetworkViewer() throws IOException {
-		Network n = NetworkLoader.loadNetwork("pretty_network.txt");
+		Network n = NetworkLoader.loadNetwork("basic_network.txt");
 		NetworkViewer.launchViewer(n); 
 		System.out.println(n);
 	}
 	
 	public static void testDesignerViewer() {
 		DesignerViewer.launchDesigner(); 
+	}
+	
+	public static void testCaseNeg1() throws IOException {
+		Network n = NetworkLoader.loadNetwork("basic_network.txt");
+		n.init();
+		
+		for(int i = 0; i < 10; i++) {
+			n.tick();
+		}
 	}
 }
