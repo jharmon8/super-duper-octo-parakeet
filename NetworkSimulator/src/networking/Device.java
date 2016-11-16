@@ -13,7 +13,7 @@ public abstract class Device {
 		this.addr = addr;
 	}
 	
-	public abstract Packet request();
+	public abstract void request(Packet p, PriorityQueue<Event> q);
 	public abstract void route(Packet p, PriorityQueue<Event> q);
 	public abstract boolean addLink(Link l);
 	public abstract boolean setLinks(ArrayList<Link> links);

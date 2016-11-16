@@ -1,4 +1,5 @@
 t: -6
+# a: 64
 
 $
 
@@ -7,14 +8,16 @@ $
 
 $
 
-# Rates are always Mbps
+# Rates are always Bps
 # Latency is always ms
-# Buffer is always KB
-192.168.1.7 192.168.1.8 10 10 64
+# Buffer is always B
+192.168.1.7 192.168.1.8 10000000 10 640000
 
 $
 
-# Packet size is always MB
-192.168.1.7 192.168.1.8 20 1000
+# Packet size is always bytes
+# window size
+# Data amt is always B
+192.168.1.7 192.168.1.8 1024 10 20000000
 
 $

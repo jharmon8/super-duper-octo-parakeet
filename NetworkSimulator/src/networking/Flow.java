@@ -7,9 +7,10 @@ import networking.Event.Type;
 
 public class Flow {
 	Device source, dest;
-	int packetSize, window;
+	int packetSize, window, dataAmt;
+	int windowSaturation = 0;
 	
-	public Flow(Device source, Device dest, String packetSize, String window) {
+	public Flow(Device source, Device dest, String packetSize, String window, String dataAmt) {
 		if(!source.isHost()) {
 			System.err.println(source.addr + " is not a host");
 			System.exit(1);
@@ -23,6 +24,7 @@ public class Flow {
 		this.dest = dest;
 		this.packetSize = Integer.parseInt(packetSize);
 		this.window = Integer.parseInt(window);
+		this.dataAmt = Integer.parseInt(dataAmt);
 	}
 
 	public void draw(Graphics g) {
@@ -33,13 +35,34 @@ public class Flow {
 	// Send first packet by putting trans event on q
 	public void init(PriorityQueue<Event> q) {
 		// TODO Auto-generated method stub
-		source.route(getPacket(), q);
+		while(windowSaturation < window) {
+			Packet p = getPacket();
+			if(p != null) {
+				source.request(p, q);
+			}
+			windowSaturation++;
+		}
 	}
 	
 	
 	// Generate a packet for the source to send
 	// Will be called every time the src has an opportunity to send a packet
 	public Packet getPacket() {
-		return new Packet(packetSize, source);
+		if(dataAmt > 0) {
+			dataAmt -= packetSize;
+			return new Packet(packetSize, source, this);
+		}
+		
+		return null;
+	}
+
+	public void acknowledge(Packet p, PriorityQueue<Event> q) {
+		// TODO Auto-generated method stub
+		windowSaturation--;
+		Packet newp = getPacket();
+		if(newp != null) {
+			source.request(newp, q);
+		}
+		windowSaturation++;
 	}
 }

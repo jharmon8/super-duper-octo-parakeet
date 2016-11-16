@@ -21,7 +21,7 @@ public class Link {
 	
 	// The end time that the last packet will finish transmitting (no delay)
 	// Used when new packets are added to the buffer and need trans events
-	private int bufferEndTime = 0;
+	private double bufferEndTime = 0;
 	
 	public Link(Device d1, Device d2, int rate, int latency, int maxSize) {
 		this.devices[0] = d1;
@@ -70,9 +70,12 @@ public class Link {
 		for(Packet packet : buffer) {
 			bufferSaturation += packet.size;
 		}
-		if(bufferSaturation + p.size > maxSize) { return; }
+		if(bufferSaturation + p.size > maxSize) { 
+			System.err.println("packet dropped");
+			return; 
+		}
 		
-		int transTime = (p.size / rate) * 1000;
+		double transTime = ((double)p.size / rate) * 1000;
 
 		// if this source is the same as the last packet
 		if(sources.size() == 0 || source != sources.get(sources.size() - 1)) {
@@ -100,7 +103,7 @@ public class Link {
 	
 	// Send the top packet on the buffer on its merry way
 	public void pop(PriorityQueue<Event> q) {
-		// TODO Auto-generated method stub
+		
 		Packet pack = buffer.remove(0);
 		Device dest = sources.remove(0) == devices[0] ? devices[1] : devices[0];
 		

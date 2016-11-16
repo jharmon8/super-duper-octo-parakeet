@@ -10,6 +10,8 @@ public class Host extends Device {
 	private Link link; // this might be removed
 	private String hostname;
 	
+	private final int ACK_SIZE = 64;
+	
 	public Host(String addr, String x, String y, String hostname) {
 		// TODO Auto-generated constructor stub
 		super(addr);
@@ -43,16 +45,22 @@ public class Host extends Device {
 	}
 
 	@Override
-	public Packet request() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	// this is really simple for hosts
-	@Override
-	public void route(Packet p, PriorityQueue<Event> q) {
+	public void request(Packet p, PriorityQueue<Event> q) {
 		// TODO Auto-generated method stub
 		link.addPacket(this, p, q);
+	}
+
+	// this is really simple for hosts...
+	// nvm, this is less simple with congestion
+	@Override
+	public void route(Packet p, PriorityQueue<Event> q) {
+		if(!p.isAck) {
+			Packet ack = new Packet(ACK_SIZE, this, p.f, true);
+			// on your merry way, now!
+			link.addPacket(this, ack, q);
+		} else {
+			p.f.acknowledge(p, q);
+		}
 	}
 
 	@Override

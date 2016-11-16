@@ -27,9 +27,9 @@ public class Router extends Device {
 	}
 
 	@Override
-	public Packet request() {
+	public void request(Packet p, PriorityQueue<Event> q) {
 		// TODO Auto-generated method stub
-		return null;
+		return;
 	}
 
 	@Override

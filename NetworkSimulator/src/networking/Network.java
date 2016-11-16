@@ -14,7 +14,7 @@ public class Network {
 	private ArrayList<Flow> flows;
 	
 	private PriorityQueue<Event> q;
-	private int currTime = 0;
+	private double currTime = 0;
 	
 	public Network(int time, ArrayList<Device> d, ArrayList<Link> l, ArrayList<Flow> f) {
 		this.time = time;
@@ -35,6 +35,7 @@ public class Network {
 	}
 	
 	public void tick() {
+		if(q.isEmpty()) {return;}
 		Event e = q.peek();
 		currTime = e.endTime;
 		q.remove(e);

@@ -1,8 +1,8 @@
 package networking;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.PriorityQueue;
-
-import networking.Event.Type;
 
 public class Event implements Comparable<Event> {
 	public enum Type {
@@ -10,12 +10,12 @@ public class Event implements Comparable<Event> {
 	}
 	
 	public Type t;
-	public int endTime;
+	public double endTime;
 	public Flow f;
 	public Link l;
 	public Packet p;
 	
-	public Event(Type t, int endTime, /*Flow f, */Link l, Packet p) {
+	public Event(Type t, double endTime, /*Flow f, */Link l, Packet p) {
 		// TODO Auto-generated constructor stub
 		this.t = t;
 		this.endTime = endTime;
@@ -51,11 +51,14 @@ public class Event implements Comparable<Event> {
 	@Override
 	public int compareTo(Event e) {
 		// TODO Auto-generated method stub
-		return Integer.compare(endTime, e.endTime);
+		return Double.compare(endTime, e.endTime);
 	}
 	
 	@Override
 	public String toString() {
-		return "Time: " + endTime + "\nSource: " + p.source.addr;
+		NumberFormat f = new DecimalFormat("#0.0000");
+		String output = "Time: " + f.format(endTime) + "\nSource: " + p.source.addr;
+		if(p.isAck) { output += "\n - is ACK"; }
+		return output;
 	}
 }

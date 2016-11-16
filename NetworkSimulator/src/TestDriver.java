@@ -25,7 +25,7 @@ public class TestDriver {
 		Network n = NetworkLoader.loadNetwork("basic_network.txt");
 		n.init();
 		
-		for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 11000000; i++) {
 			n.tick();
 		}
 	}
