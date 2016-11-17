@@ -102,7 +102,7 @@ public class NetworkLoader {
 					System.exit(1);
 				}
 				
-				Flow flow = new Flow(source, dest, split[2], split[3], split[4]);
+				Flow flow = new Flow(source, dest, split[2], split[3], split[4], split[5]);
 				f.add(flow);
 				break;
 			default:

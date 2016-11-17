@@ -3,21 +3,21 @@ t: -6
 
 $
 
-1 192.168.1.7 100 100 Alice
-1 192.168.1.8 400 100 Bob
+1 1 100 100 H1
+1 2 400 100 H2
 
 $
 
 # Rates are always Bps
 # Latency is always ms
 # Buffer is always B
-192.168.1.7 192.168.1.8 10000000 10 64000
+1 2 10000000 10 64000
 
 $
 
 # Packet size is always bytes
 # window size
 # Data amt is always B
-192.168.1.7 192.168.1.8 1024 60 20000000
+1 2 1024 60 20000000 1
 
 $
