@@ -94,7 +94,8 @@ public class Link {
 		// create the event
 		Event e = new Event(
 				Type.TRANS, 
-				bufferEndTime, 
+				//TODO undo this 
+				bufferEndTime + 1000, 
 //				this, 
 				this, 
 				p
