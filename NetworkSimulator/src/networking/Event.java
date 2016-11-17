@@ -57,9 +57,11 @@ public class Event implements Comparable<Event> {
 	@Override
 	public String toString() {
 		NumberFormat f = new DecimalFormat("#0.0000");
-		String output = f.format(endTime) + "	";
-		if(p.isAck) { output += "1"; }
-		else {output += "0"; }
+		//String output = f.format(endTime) + "	";
+		//if(p.isAck) { output += "1"; }
+		//else {output += "0"; }
+		String output = "Time: " + f.format(endTime) + "\nSource: " + p.source.addr;
+		if(p.isAck) { output += "\n - is ACK"; }
 		return output;
 	}
 }

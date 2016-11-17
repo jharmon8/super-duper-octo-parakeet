@@ -25,7 +25,7 @@ public class TestDriver {
 	}
 	
 	public static void testCase0() throws IOException {
-		System.setOut(new PrintStream(new BufferedOutputStream(new FileOutputStream("output.txt"))));
+		//System.setOut(new PrintStream(new BufferedOutputStream(new FileOutputStream("output.txt"))));
 		
 		Network n = NetworkLoader.loadNetwork("basic_network.txt");
 		NetworkViewer.launchViewer(n); 
