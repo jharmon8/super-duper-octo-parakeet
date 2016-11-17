@@ -1,9 +1,12 @@
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 
 import graphics.DesignerViewer;
 import graphics.NetworkViewer;
-import io.*;
-import networking.*;
+import io.NetworkLoader;
+import networking.Network;
 
 
 public class TestDriver {
@@ -22,6 +25,8 @@ public class TestDriver {
 	}
 	
 	public static void testCase0() throws IOException {
+		System.setOut(new PrintStream(new BufferedOutputStream(new FileOutputStream("output.txt"))));
+		
 		Network n = NetworkLoader.loadNetwork("basic_network.txt");
 		NetworkViewer.launchViewer(n); 
 		System.out.println(n);
