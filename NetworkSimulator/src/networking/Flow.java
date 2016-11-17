@@ -8,9 +8,10 @@ import networking.Event.Type;
 public class Flow {
 	Device source, dest;
 	int packetSize, window, dataAmt;
+	double delay;
 	int windowSaturation = 0;
 	
-	public Flow(Device source, Device dest, String packetSize, String window, String dataAmt) {
+	public Flow(Device source, Device dest, String packetSize, String window, String dataAmt, String delay) {
 		if(!source.isHost()) {
 			System.err.println(source.addr + " is not a host");
 			System.exit(1);
@@ -25,6 +26,7 @@ public class Flow {
 		this.packetSize = Integer.parseInt(packetSize);
 		this.window = Integer.parseInt(window);
 		this.dataAmt = Integer.parseInt(dataAmt);
+		this.delay = Double.parseDouble(delay);
 	}
 
 	public void draw(Graphics g) {
