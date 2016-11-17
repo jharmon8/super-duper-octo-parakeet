@@ -37,12 +37,22 @@ public class RouteTable {
 		for(TableEntry e : t) {
 			if(e.addr.equals(dest)) {
 				oldDist = e.dist;
+				break;
 			}
 		}
 		
 		if(oldDist == -1) {
 			t.add(new TableEntry(dest, l, dist));
-			
+		}
+		
+		if(oldDist > dist) {
+			for(TableEntry e : t) {
+				if(e.addr.equals(dest)) {
+					e.l = l;
+					e.dist = dist;
+					break;
+				}
+			}
 		}
 	}
 	
