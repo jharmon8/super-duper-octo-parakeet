@@ -81,7 +81,10 @@ public class Router extends Device {
 	@Override
 	public void broadcast(Device dest, int dist) {
 		// TODO Auto-generated method stub
-		
+		ArrayList<Link> links = rt.getLinks();
+		for(Link l : links) {
+			l.send(this, dest.addr, dist);
+		}
 	}
 
 	@Override
