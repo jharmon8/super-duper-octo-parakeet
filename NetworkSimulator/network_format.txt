@@ -10,6 +10,8 @@ EXAMPLE:
 
 # this may say that time is granular to 1 ns (10^-9)
 t: -9
+# this is the size of an ack packet
+a: 64
 
 # this indicates next section
 $
@@ -30,7 +32,7 @@ $
 $
 
 # this section is links, which are physical connections between two addresses
-# link format: <address_1> <address_2> <rate_bps> <latency>
+# link format: <address_1> <address_2> <rate_bps> <latency> 
 192.168.1.7 192.168.1.1 1000000 5000
 192.168.1.8 192.168.1.1 1000000 5000
 192.168.1.1 192.168.1.9 1000000 5000
@@ -39,8 +41,8 @@ $
 
 # this section is flows
 # TODO: I think there needs to be more fields here
-# flow format: <address_1> <address_2> <packet_size> <window>
-192.168.1.7 192.168.1.8 1000 1000
+# flow format: <address_1> <address_2> <packet_size> <window> <data_amt> <delay>
+192.168.1.7 192.168.1.8 1000 1000 64000 1.0
 
 $
 
