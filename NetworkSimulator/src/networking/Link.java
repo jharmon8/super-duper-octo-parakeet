@@ -66,14 +66,19 @@ public class Link {
 	}
 	
 	public void addPacket(Device source, Packet p, PriorityQueue<Event> q) {
-		int bufferSaturation = 0;
-		for(Packet packet : buffer) {
-			bufferSaturation += packet.size;
-		}
-		if(bufferSaturation + p.size > maxSize) { 
-			System.err.println("packet dropped");
-			return; 
-		}
+		Device dest = source == devices[0] ? devices[1] : devices[0];
+		
+		// maaaaaaan fuck that
+//		if(!dest.isHost()) {
+			int bufferSaturation = 0;
+			for(Packet packet : buffer) {
+				bufferSaturation += packet.size;
+			}
+			if(bufferSaturation + p.size > maxSize) { 
+				System.err.println("packet dropped");
+				return; 
+			}
+//		}
 		
 		double transTime = ((double)p.size / rate) * 1000;
 

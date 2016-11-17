@@ -11,13 +11,13 @@ $
 # Rates are always Bps
 # Latency is always ms
 # Buffer is always B
-192.168.1.7 192.168.1.8 10000000 10 640000
+192.168.1.7 192.168.1.8 10000000 10 64000
 
 $
 
 # Packet size is always bytes
 # window size
 # Data amt is always B
-192.168.1.7 192.168.1.8 1024 10 20000000
+192.168.1.7 192.168.1.8 1024 60 20000000
 
 $

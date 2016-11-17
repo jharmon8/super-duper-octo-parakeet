@@ -8,7 +8,7 @@ import networking.*;
 
 public class TestDriver {
 	public static void main(String[] args) throws IOException {
-		testCaseNeg1();
+		testCase0();
 	}
 	
 	public static void testNetworkViewer() throws IOException {
@@ -21,7 +21,7 @@ public class TestDriver {
 		DesignerViewer.launchDesigner(); 
 	}
 	
-	public static void testCaseNeg1() throws IOException {
+	public static void testCase0() throws IOException {
 		Network n = NetworkLoader.loadNetwork("basic_network.txt");
 		n.init();
 		
