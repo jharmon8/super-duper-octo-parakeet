@@ -21,6 +21,7 @@ public abstract class Device {
 	public abstract Link getSingleLink();
 	public abstract void draw(Graphics g);
 	public abstract boolean isHost();
+	public abstract void broadcast(Device dest, int dist);
 
 	public void drawSelection(Graphics g) {
 		int size = 20;

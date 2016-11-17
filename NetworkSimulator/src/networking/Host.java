@@ -108,4 +108,10 @@ public class Host extends Device {
 		return link;
 	}
 
+	@Override
+	public void broadcast(Device dest, int dist) {
+		// TODO Auto-generated method stub
+		// don't do anything
+	}
+
 }

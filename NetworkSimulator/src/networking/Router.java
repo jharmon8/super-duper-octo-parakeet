@@ -77,4 +77,10 @@ public class Router extends Device {
 		// TODO Auto-generated method stub
 		return links.get(0);
 	}
+
+	@Override
+	public void broadcast(Device dest, int dist) {
+		// TODO Auto-generated method stub
+		
+	}
 }

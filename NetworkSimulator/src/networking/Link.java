@@ -109,4 +109,9 @@ public class Link {
 		
 		dest.route(pack, q);
 	}
+	
+	// bypass 
+	public void send(Device src, String addr, int dist) {
+		
+	}
 }
