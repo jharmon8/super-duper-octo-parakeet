@@ -56,6 +56,10 @@ public class Network {
 	
 	// Setup the routing tables
 	public int execBellmanFord() {
-		return 0;
+		for(Device d : devices) {
+			d.broadcast(d, 0);
+		}
+		
+		return -1;
 	}
 }
