@@ -7,7 +7,7 @@ import java.util.PriorityQueue;
 
 
 public class Router extends Device {
-	ArrayList<Link> links = new ArrayList<Link>();
+	RouteTable rt = new RouteTable(this);
 	private int congestion;
 	
 	public Router(String addr, String x, String y, String cong) {
@@ -41,8 +41,7 @@ public class Router extends Device {
 	@Override
 	public boolean addLink(Link l) {
 		// TODO Auto-generated method stub
-		links.add(l);
-		return true;
+		return rt.addLink(l);
 	}
 
 	@Override
@@ -54,7 +53,7 @@ public class Router extends Device {
 	@Override
 	public ArrayList<Link> getLinks() {
 		// TODO Auto-generated method stub
-		return links;
+		return rt.getLinks();
 	}
 
 	@Override
@@ -73,8 +72,21 @@ public class Router extends Device {
 	}
 
 	@Override
+	// I don't think routers need this?
 	public Link getSingleLink() {
 		// TODO Auto-generated method stub
-		return links.get(0);
+		return null;
+	}
+
+	@Override
+	public void broadcast(Device dest, int dist) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void bfReceive(Link link, String dest, int dist) {
+		// TODO Auto-generated method stub
+		rt.update(link, dest, dist);
 	}
 }

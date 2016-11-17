@@ -114,4 +114,14 @@ public class Link {
 		
 		dest.route(pack, q);
 	}
+	
+	// bypass all the shit
+	// (this is why our bellman-ford is "cheating"
+	public void send(Device src, String addr, int dist) {
+		if(devices[0] == src) {
+			devices[1].bfReceive(this, addr, dist);
+		} else {
+			devices[0].bfReceive(this, addr, dist);
+		}
+	}
 }

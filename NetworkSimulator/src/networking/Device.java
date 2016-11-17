@@ -21,6 +21,7 @@ public abstract class Device {
 	public abstract Link getSingleLink();
 	public abstract void draw(Graphics g);
 	public abstract boolean isHost();
+	public abstract void broadcast(Device dest, int dist);
 
 	public void drawSelection(Graphics g) {
 		int size = 20;
@@ -34,4 +35,6 @@ public abstract class Device {
 		
 		return Math.sqrt(dx * dx + dy * dy);
 	}
+
+	public abstract void bfReceive(Link link, String dest, int dist);
 }
