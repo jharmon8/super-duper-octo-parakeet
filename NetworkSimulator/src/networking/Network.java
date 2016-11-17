@@ -53,7 +53,7 @@ public class Network {
 			f.draw(g);
 		}
 	}
-	
+	// wtf
 	// Setup the routing tables
 	public int execBellmanFord() {
 		for(Device d : devices) {
