@@ -37,13 +37,13 @@ public class Flow {
 	// Send first packet by putting trans event on q
 	public void init(PriorityQueue<Event> q) {
 		// TODO Auto-generated method stub
-		while(windowSaturation < window) {
+//		while(windowSaturation < window) {
 			Packet p = getPacket();
 			if(p != null) {
 				source.request(p, q);
 			}
 			windowSaturation++;
-		}
+//		}
 	}
 	
 	
@@ -56,6 +56,25 @@ public class Flow {
 		}
 		
 		return null;
+	}
+	
+	// Host asks flow to send a packet
+	// returns true if a packet is sent
+	public boolean opportunity(Device d, PriorityQueue<Event> q) {
+		Packet p = null;
+		
+		if(dataAmt > 0 && windowSaturation < window) {
+			dataAmt -= packetSize;
+			p = new Packet(packetSize, source, this);
+		}
+		
+		if(p != null) {
+			d.request(p, q);
+			windowSaturation++;
+			return true;
+		}
+		
+		return false;
 	}
 
 	public void acknowledge(Packet p, PriorityQueue<Event> q) {

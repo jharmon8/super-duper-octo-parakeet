@@ -92,4 +92,16 @@ public class Router extends Device {
 		// TODO Auto-generated method stub
 		rt.update(link, dest, dist);
 	}
+
+	@Override
+	public void opportunity(PriorityQueue<Event> q) {
+		// TODO Auto-generated method stub
+		// don't do anything?
+	}
+
+	@Override
+	public void addFlow(Flow f) {
+		// TODO Auto-generated method stub
+		// This might be useful when we TCP routing packets
+	}
 }

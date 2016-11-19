@@ -104,6 +104,7 @@ public class NetworkLoader {
 				
 				Flow flow = new Flow(source, dest, split[2], split[3], split[4], split[5]);
 				f.add(flow);
+				source.addFlow(flow);
 				break;
 			default:
 				System.err.println("too many sections in loader");

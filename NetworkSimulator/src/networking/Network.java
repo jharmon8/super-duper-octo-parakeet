@@ -34,12 +34,14 @@ public class Network {
 		}
 	}
 	
-	public void tick() {
-		if(q.isEmpty()) {return;}
+	// returns true if anything happens
+	public boolean tick() {
+		if(q.isEmpty()) {return false;}
 		Event e = q.peek();
 		currTime = e.endTime;
 		q.remove(e);
 		e.resolve(q);
+		return true;
 	}
 	
 	public void draw(Graphics g, int w, int h) {

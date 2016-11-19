@@ -12,6 +12,9 @@ public class Host extends Device {
 	
 	private final int ACK_SIZE = 64;
 	
+	// I think this is neccessary
+	private ArrayList<Flow> flows = new ArrayList<Flow>();
+	
 	public Host(String addr, String x, String y, String hostname) {
 		// TODO Auto-generated constructor stub
 		super(addr);
@@ -118,6 +121,23 @@ public class Host extends Device {
 	public void bfReceive(Link link, String dest, int dist) {
 		// TODO Auto-generated method stub
 		// also don't do anything
+	}
+
+	@Override
+	public void opportunity(PriorityQueue<Event> q) {
+		// TODO Auto-generated method stub
+		// ask the flow what to do
+		for(Flow f : flows) {
+			if(f.opportunity(this, q)) {
+				break;
+			}
+		}
+	}
+
+	@Override
+	public void addFlow(Flow f) {
+		// TODO Auto-generated method stub
+		flows.add(f);
 	}
 
 }

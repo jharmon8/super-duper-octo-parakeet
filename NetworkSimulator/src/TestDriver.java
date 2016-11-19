@@ -42,8 +42,6 @@ public class TestDriver {
 		System.out.println(n);
 		n.init();
 		
-		for(int i = 0; i < 11000000; i++) {
-			n.tick();
-		}
+		while(n.tick()) {}
 	}
 }

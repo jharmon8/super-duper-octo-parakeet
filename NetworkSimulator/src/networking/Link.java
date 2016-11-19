@@ -67,6 +67,7 @@ public class Link {
 	
 	public void addPacket(Device source, Packet p, PriorityQueue<Event> q) {
 		Device dest = source == devices[0] ? devices[1] : devices[0];
+		double temp = 0;
 		
 		// maaaaaaan fuck that
 //		if(!dest.isHost()) {
@@ -85,22 +86,35 @@ public class Link {
 		// if this source is the same as the last packet
 		if(sources.size() == 0 || source != sources.get(sources.size() - 1)) {
 			// gotta worry about delay
-			bufferEndTime += transTime + latency;
+			temp += transTime + latency;
 		} else {
 			// don't worry about delay
-			bufferEndTime += transTime;
+			temp += transTime;
 		}
 		
-		// create the event
-		Event e = new Event(
-				Type.TRANS, 
+		// create the events
+		Event e1 = new Event(
+				Type.OPPOR, 
 				//TODO undo this 
-				bufferEndTime + 1000, 
+				bufferEndTime + transTime, 
 //				this, 
 				this, 
+				source,
 				p
 		);
-		q.add(e);
+		q.add(e1);
+		Event e2 = new Event(
+				Type.TRANS, 
+				//TODO undo this 
+				temp, 
+//				this, 
+				this, 
+				source,
+				p
+		);
+		q.add(e2);
+		
+		bufferEndTime = temp;
 		
 		// add the packet and source to buffer
 		buffer.add(p);
@@ -114,10 +128,20 @@ public class Link {
 		Device dest = sources.remove(0) == devices[0] ? devices[1] : devices[0];
 		
 		dest.route(pack, q);
+		
+		if(buffer.isEmpty()) {
+			Event e = new Event(
+					Type.OPPOR,
+					-1, // I think -1 will ensure the event happens next?
+					this,
+					dest,
+					pack
+			);
+		}
 	}
 	
 	// bypass all the shit
-	// (this is why our bellman-ford is "cheating"
+	// (this is why our bellman-ford is "cheating")
 	public void send(Device src, String addr, int dist) {
 		if(devices[0] == src) {
 			devices[1].bfReceive(this, addr, dist);

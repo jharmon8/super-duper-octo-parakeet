@@ -6,7 +6,7 @@ import java.util.PriorityQueue;
 
 public class Event implements Comparable<Event> {
 	public enum Type {
-		TRANS, /*DELAY,*/ COMPL
+		OPPOR, TRANS, /*DELAY,*/ COMPL
 	}
 	
 	public Type t;
@@ -14,13 +14,15 @@ public class Event implements Comparable<Event> {
 	public Flow f;
 	public Link l;
 	public Packet p;
+	public Device d;
 	
-	public Event(Type t, double endTime, /*Flow f, */Link l, Packet p) {
+	public Event(Type t, double endTime, Link l, Device d, Packet p) {
 		// TODO Auto-generated constructor stub
 		this.t = t;
 		this.endTime = endTime;
 //		this.f = f;
 		this.l = l;
+		this.d = d;
 		this.p = p;
 	}
 	
@@ -30,7 +32,11 @@ public class Event implements Comparable<Event> {
 	public Event resolve(PriorityQueue<Event> q) {
 		// might not need this switch anymore
 		switch(t) {
+		case OPPOR:
+			d.opportunity(q);
+			break;
 		case TRANS:
+			l.pop(q);
 			break;
 //		case DELAY:
 //			break;
@@ -40,7 +46,6 @@ public class Event implements Comparable<Event> {
 			break;	
 		}
 		
-		l.pop(q);
 		
 		// Print a bunch of junk to the graph stream
 		System.out.println(this);
@@ -60,8 +65,20 @@ public class Event implements Comparable<Event> {
 		//String output = f.format(endTime) + "	";
 		//if(p.isAck) { output += "1"; }
 		//else {output += "0"; }
-		String output = "Time: " + f.format(endTime) + "\nSource: " + p.source.addr;
-		if(p.isAck) { output += "\n - is ACK"; }
+		String output = "Time: " + f.format(endTime);
+		switch(t) {
+		case OPPOR:
+			output+= "\nType: " + "OPPOR";
+			break;
+		case TRANS:
+			output+= "\nType: " + "TRANS";
+			break;
+		}
+		
+		if(p != null) {
+			output += "\nSource: " + p.source.addr;
+			if(p.isAck) { output += "\n - is ACK"; }
+		}
 		return output;
 	}
 }

@@ -37,4 +37,8 @@ public abstract class Device {
 	}
 
 	public abstract void bfReceive(Link link, String dest, int dist);
+
+	// Informs a host that a link has freed up for transmission
+	public abstract void opportunity(PriorityQueue<Event> q);
+	public abstract void addFlow(Flow f);
 }
