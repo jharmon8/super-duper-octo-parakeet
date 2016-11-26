@@ -7,11 +7,11 @@ import networking.Event.Type;
 
 public class Flow {
 	Device source, dest;
-	int packetSize, window, dataAmt;
+	int packetSize, window, dataAmt, congestionType;
 	double delay;
 	int windowSaturation = 0;
 	
-	public Flow(Device source, Device dest, String packetSize, String window, String dataAmt, String delay) {
+	public Flow(Device source, Device dest, String packetSize, String congType, String dataAmt, String delay) {
 		if(!source.isHost()) {
 			System.err.println(source.addr + " is not a host");
 			System.exit(1);
@@ -24,9 +24,10 @@ public class Flow {
 		this.source = source;
 		this.dest = dest;
 		this.packetSize = Integer.parseInt(packetSize);
-		this.window = Integer.parseInt(window);
+		this.congestionType = Integer.parseInt(congType);
 		this.dataAmt = Integer.parseInt(dataAmt);
 		this.delay = Double.parseDouble(delay);
+		this.window = 1;
 	}
 
 	public void draw(Graphics g) {
@@ -86,4 +87,15 @@ public class Flow {
 		}
 		windowSaturation++;
 	}
+	
+	public void fastTCP()
+	{
+		double base = 100;
+		double gam = .5;
+		double RTT = 1;
+		int alpha = 15;
+		int temp1 = window * 2;
+		double temp2 = (1 - gam)* window + gam * (window * (base / RTT) + alpha);
+		Math.min(temp1, (int) temp2);
+				}
 }

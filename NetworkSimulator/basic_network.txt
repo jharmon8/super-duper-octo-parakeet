@@ -18,6 +18,6 @@ $
 # Packet size is always bytes
 # window size
 # Data amt is always B
-1 2 1024 60 10000 1
+1 2 1024 1 10000 1
 
 $
