@@ -1,6 +1,7 @@
 package networking;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 public class RouteTable {
 	private ArrayList<TableEntry> t = new ArrayList<TableEntry>();
@@ -30,7 +31,7 @@ public class RouteTable {
 		return links;
 	}
 
-	public void update(Link l, String dest, int dist) {
+	public void update(Link l, String dest, int dist, PriorityQueue<Event> q) {
 		// TODO Auto-generated method stub
 		int oldDist = -1;
 		
@@ -42,7 +43,9 @@ public class RouteTable {
 		}
 		
 		if(oldDist == -1) {
-			t.add(new TableEntry(dest, l, dist));
+			t.add(new TableEntry(dest, l, dist + 1));
+			r.realBroadcast(dest, dist + 1, q);
+			return;
 		}
 		
 		if(oldDist > dist) {
@@ -50,6 +53,8 @@ public class RouteTable {
 				if(e.addr.equals(dest)) {
 					e.l = l;
 					e.dist = dist;
+					t.add(new TableEntry(dest, l, dist + 1));
+					r.realBroadcast(dest, dist + 1, q);
 					break;
 				}
 			}

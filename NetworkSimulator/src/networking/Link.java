@@ -67,7 +67,7 @@ public class Link {
 	
 	public void addPacket(Device source, Packet p, PriorityQueue<Event> q) {
 		Device dest = source == devices[0] ? devices[1] : devices[0];
-		double temp = 0;
+		double temp = buffer.isEmpty() ? Network.currTime : bufferEndTime;
 		
 		// maaaaaaan fuck that
 //		if(!dest.isHost()) {
@@ -93,7 +93,7 @@ public class Link {
 		}
 		
 		// create the events
-		Event e1 = new Event(
+/*		Event e1 = new Event(
 				Type.OPPOR, 
 				//TODO undo this 
 				bufferEndTime + transTime, 
@@ -102,7 +102,7 @@ public class Link {
 				source,
 				p
 		);
-		q.add(e1);
+		q.add(e1);*/
 		Event e2 = new Event(
 				Type.TRANS, 
 				//TODO undo this 
@@ -127,9 +127,9 @@ public class Link {
 		Packet pack = buffer.remove(0);
 		Device dest = sources.remove(0) == devices[0] ? devices[1] : devices[0];
 		
-		dest.route(pack, q);
+		dest.route(this, pack, q);
 		
-		if(buffer.isEmpty()) {
+/*		if(buffer.isEmpty()) {
 			Event e = new Event(
 					Type.OPPOR,
 					-1, // I think -1 will ensure the event happens next?
@@ -137,7 +137,7 @@ public class Link {
 					dest,
 					pack
 			);
-		}
+		}*/
 	}
 	
 	// bypass all the shit

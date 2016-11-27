@@ -6,7 +6,7 @@ import java.util.PriorityQueue;
 
 public class Event implements Comparable<Event> {
 	public enum Type {
-		OPPOR, TRANS, /*DELAY,*/ COMPL
+		START, OPPOR, TRANS, /*DELAY,*/ COMPL
 	}
 	
 	public Type t;
@@ -26,15 +26,24 @@ public class Event implements Comparable<Event> {
 		this.p = p;
 	}
 	
+	public Event(Type t, double endTime, Flow f) {
+		this.t = t;
+		this.endTime = endTime;
+		this.f = f;
+	}
+	
 	// updates the network to complete this event
 	// if a new event is caused, return that event
 	// returns null otherwise
 	public Event resolve(PriorityQueue<Event> q) {
 		// might not need this switch anymore
 		switch(t) {
-		case OPPOR:
-			d.opportunity(q);
+		case START:
+			f.init(q);
 			break;
+//		case OPPOR:
+//			d.opportunity(q);
+//			break;
 		case TRANS:
 			l.pop(q);
 			break;
@@ -67,9 +76,12 @@ public class Event implements Comparable<Event> {
 		//else {output += "0"; }
 		String output = "Time: " + f.format(endTime);
 		switch(t) {
-		case OPPOR:
-			output+= "\nType: " + "OPPOR";
+		case START:
+			output+= "\nType: " + "START";
 			break;
+//		case OPPOR:
+//			output+= "\nType: " + "OPPOR";
+//			break;
 		case TRANS:
 			output+= "\nType: " + "TRANS";
 			break;

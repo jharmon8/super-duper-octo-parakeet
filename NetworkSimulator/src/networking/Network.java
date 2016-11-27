@@ -1,8 +1,14 @@
 package networking;
 
 import java.awt.Graphics;
+import java.io.BufferedOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
+
+import io.StreamManager;
 
 public class Network {
 	// metadata
@@ -14,7 +20,7 @@ public class Network {
 	private ArrayList<Flow> flows;
 	
 	private PriorityQueue<Event> q;
-	private double currTime = 0;
+	public static double currTime = 0;
 	
 	public Network(int time, ArrayList<Device> d, ArrayList<Link> l, ArrayList<Flow> f) {
 		this.time = time;
@@ -27,10 +33,27 @@ public class Network {
 	}
 	
 	public void init() {
-		execBellmanFord();
+		// Setup some streams
+		PrintStream stream;
+		try {
+			stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_routing.txt")));
+			StreamManager.addStream("routing", stream);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.exit(1);
+		}
 		
+		// prepare the flows
 		for(Flow f : flows) {
-			f.init(q);
+//			f.init(q);
+			f.addStartEvent(q);
+		}
+		
+		// start building the routing tables
+//		execBellmanFord();
+		for(Device d : devices) {
+			d.realBroadcast(d.addr, 0, q);
 		}
 	}
 	

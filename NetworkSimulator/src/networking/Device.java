@@ -14,7 +14,7 @@ public abstract class Device {
 	}
 	
 	public abstract void request(Packet p, PriorityQueue<Event> q);
-	public abstract void route(Packet p, PriorityQueue<Event> q);
+	public abstract void route(Link l, Packet p, PriorityQueue<Event> q);
 	public abstract boolean addLink(Link l);
 	public abstract boolean setLinks(ArrayList<Link> links);
 	public abstract ArrayList<Link> getLinks();
@@ -22,6 +22,7 @@ public abstract class Device {
 	public abstract void draw(Graphics g);
 	public abstract boolean isHost();
 	public abstract void broadcast(Device dest, int dist);
+	public abstract void realBroadcast(String dest, int dist, PriorityQueue<Event> q);
 
 	public void drawSelection(Graphics g) {
 		int size = 20;

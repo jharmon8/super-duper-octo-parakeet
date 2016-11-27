@@ -11,7 +11,7 @@ import networking.Network;
 
 public class TestDriver {
 	public static void main(String[] args) throws IOException {
-		testCase0();
+		testCase1();
 	}
 	
 	public static void testNetworkViewer() throws IOException {
@@ -32,10 +32,9 @@ public class TestDriver {
 		System.out.println(n);
 		n.init();
 		
-		for(int i = 0; i < 11000000; i++) {
-			n.tick();
-		}
+		while(n.tick()) {}
 	}
+	
 	public static void testCase1() throws IOException {
 		Network n = NetworkLoader.loadNetwork("Test_Case_1.txt");
 		NetworkViewer.launchViewer(n); 

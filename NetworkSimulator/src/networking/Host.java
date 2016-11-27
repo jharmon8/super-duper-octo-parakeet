@@ -10,6 +10,7 @@ public class Host extends Device {
 	private Link link; // this might be removed
 	private String hostname;
 	
+	private ArrayList<Packet> received = new ArrayList<Packet>();
 	private final int ACK_SIZE = 64;
 	
 	// I think this is neccessary
@@ -56,9 +57,12 @@ public class Host extends Device {
 	// this is really simple for hosts...
 	// nvm, this is less simple with congestion
 	@Override
-	public void route(Packet p, PriorityQueue<Event> q) {
+	public void route(Link l, Packet p, PriorityQueue<Event> q) {
+		if(p.isRouting) {return;}
+		
 		if(!p.isAck) {
-			Packet ack = new Packet(ACK_SIZE, this, p.f, true);
+			received.add(p);
+			Packet ack = new Packet(ACK_SIZE, this, p.source, p.f, true, getAckId());
 			// on your merry way, now!
 			link.addPacket(this, ack, q);
 		} else {
@@ -124,6 +128,7 @@ public class Host extends Device {
 	}
 
 	@Override
+	@Deprecated
 	public void opportunity(PriorityQueue<Event> q) {
 		// TODO Auto-generated method stub
 		// ask the flow what to do
@@ -139,5 +144,30 @@ public class Host extends Device {
 		// TODO Auto-generated method stub
 		flows.add(f);
 	}
+	
+	private int getAckId() {
+		int i = 1;
+		
+		while(true) {
+			boolean found = false;
+			for(Packet p : received) {
+				if(p.id == i) {
+					i++;
+					found = true;
+					break;
+				}
+			}
+			
+			if(!found) {break;}
+		}
+		
+		return i;
+	}
 
+	@Override
+	public void realBroadcast(String dest, int dist, PriorityQueue<Event> q) {
+		// TODO Auto-generated method stub
+		Packet p = new Packet(64, this, dest, dist, 1);
+		link.addPacket(this, p, q);
+	}
 }

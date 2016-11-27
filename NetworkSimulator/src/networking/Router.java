@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
+import io.StreamManager;
+
 
 public class Router extends Device {
 	RouteTable rt = new RouteTable(this);
@@ -33,9 +35,28 @@ public class Router extends Device {
 	}
 
 	@Override
-	public void route(Packet p, PriorityQueue<Event> q) {
+	public void route(Link l, Packet p, PriorityQueue<Event> q) {
 		// TODO Auto-generated method stub
+		if(p.isRouting) {
+			if(p.isAck) {
+				// TODO do something
+				return;
+			}
+			
+			rt.update(l, p.destAddr, p.dist, q);
+			Packet ack = new Packet(64, this, true, p.id);
+			l.addPacket(this, ack, q);
+			return;
+		}
 		
+		Link route = rt.getRoute(p.dest.addr);
+		if(route == null) {
+			System.err.println("Dropping packet due to missing routing entry");
+			return;
+		}
+		
+		StreamManager.print("routing", Network.currTime + "\t" + this.addr + "\n");
+		route.addPacket(this, p, q);
 	}
 
 	@Override
@@ -86,11 +107,19 @@ public class Router extends Device {
 			l.send(this, dest.addr, dist);
 		}
 	}
+	
+	public void realBroadcast(String dest, int dist, PriorityQueue<Event> q) {
+		ArrayList<Link> links = rt.getLinks();
+		for(Link l : links) {
+			Packet p = new Packet(64, this, dest, dist, 1);
+			l.addPacket(this, p, q);
+		}
+	}
 
 	@Override
 	public void bfReceive(Link link, String dest, int dist) {
 		// TODO Auto-generated method stub
-		rt.update(link, dest, dist);
+//		rt.update(link, dest, dist, q);
 	}
 
 	@Override

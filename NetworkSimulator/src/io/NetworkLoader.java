@@ -115,10 +115,11 @@ public class NetworkLoader {
 		br.close();
 		
 		// add a reference of each relevant link to each device
+		// wtf why is this here TODO
 		for(Device dev : d) {
 			for(Link link : l) {
 				if(link.containsDevice(dev)) {
-					dev.addLink(link);
+//					dev.addLink(link);
 				}
 			}
 		}
