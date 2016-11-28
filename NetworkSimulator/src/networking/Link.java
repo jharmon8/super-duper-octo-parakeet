@@ -2,9 +2,12 @@ package networking;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
+import io.StreamManager;
 import networking.Event.Type;
 
 public class Link {
@@ -77,6 +80,8 @@ public class Link {
 			}
 			if(bufferSaturation + p.size > maxSize) { 
 				System.err.println("packet dropped");
+				NumberFormat f = new DecimalFormat("#0.0000");
+				StreamManager.print("packet", f.format(Network.currTime) + "\t" + p.id + "\t" + "DROP\n");
 				return; 
 			}
 //		}
@@ -125,19 +130,31 @@ public class Link {
 	public void pop(PriorityQueue<Event> q) {
 		
 		Packet pack = buffer.remove(0);
-		Device dest = sources.remove(0) == devices[0] ? devices[1] : devices[0];
+		Device src = sources.remove(0);
+		Device dest = src == devices[0] ? devices[1] : devices[0];
 		
 		dest.route(this, pack, q);
 		
-/*		if(buffer.isEmpty()) {
-			Event e = new Event(
+		if(buffer.isEmpty()) {
+			Event e1 = new Event(
 					Type.OPPOR,
-					-1, // I think -1 will ensure the event happens next?
+//					-1, // I think -1 will ensure the event happens next?
+					Network.currTime,
 					this,
 					dest,
 					pack
 			);
-		}*/
+			q.add(e1);
+/*			Event e2 = new Event(
+					Type.OPPOR,
+//					-1, // I think -1 will ensure the event happens next?
+					Network.currTime,
+					this,
+					dest,
+					pack
+			);
+			q.add(e2);*/
+		}
 	}
 	
 	// bypass all the shit

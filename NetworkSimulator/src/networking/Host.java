@@ -2,8 +2,12 @@ package networking;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
+
+import io.StreamManager;
 
 
 public class Host extends Device {
@@ -11,7 +15,9 @@ public class Host extends Device {
 	private String hostname;
 	
 	private ArrayList<Packet> received = new ArrayList<Packet>();
+	private int lastAck = -1;
 	private final int ACK_SIZE = 64;
+	private boolean needSendAck = false;
 	
 	// I think this is neccessary
 	private ArrayList<Flow> flows = new ArrayList<Flow>();
@@ -52,6 +58,8 @@ public class Host extends Device {
 	public void request(Packet p, PriorityQueue<Event> q) {
 		// TODO Auto-generated method stub
 		link.addPacket(this, p, q);
+		NumberFormat f = new DecimalFormat("#0.0000");
+		StreamManager.print("packet", f.format(Network.currTime) + "\t" + addr + "\t" + p.id + "\n");
 	}
 
 	// this is really simple for hosts...
@@ -62,9 +70,10 @@ public class Host extends Device {
 		
 		if(!p.isAck) {
 			received.add(p);
-			Packet ack = new Packet(ACK_SIZE, this, p.source, p.f, true, getAckId());
+			needSendAck = true;
+//			Packet ack = new Packet(ACK_SIZE, this, p.source, p.f, true, getAckId());
 			// on your merry way, now!
-			link.addPacket(this, ack, q);
+//			link.addPacket(this, ack, q);
 		} else {
 			p.f.acknowledge(p, q);
 		}
@@ -128,15 +137,21 @@ public class Host extends Device {
 	}
 
 	@Override
-	@Deprecated
 	public void opportunity(PriorityQueue<Event> q) {
 		// TODO Auto-generated method stub
 		// ask the flow what to do
-		for(Flow f : flows) {
-			if(f.opportunity(this, q)) {
-				break;
-			}
+//		for(Flow f : flows) {
+//			if(f.opportunity(this, q)) {
+//				break;
+//			}
+//		}
+		if(needSendAck) {
+			sendAcknowledgement(q);
+			lastAck = getAckId();
+			needSendAck = false;
 		}
+		
+		return;
 	}
 
 	@Override
@@ -145,7 +160,20 @@ public class Host extends Device {
 		flows.add(f);
 	}
 	
+	// send an ack packet
+	private boolean sendAcknowledgement(PriorityQueue<Event> q) {
+		// on your merry way, now!
+		Packet p = received.get(0);
+		Packet ack = new Packet(ACK_SIZE, this, p.source, p.f, true, getAckId());
+		link.addPacket(this, ack, q);
+		NumberFormat f = new DecimalFormat("#0.0000");
+		StreamManager.print("packet", f.format(Network.currTime) + "\t" + addr + "\t" + ack.id + "\n");
+		return false;
+	}
+	
 	private int getAckId() {
+		if(received.isEmpty()) {return -1;}
+		
 		int i = 1;
 		
 		while(true) {

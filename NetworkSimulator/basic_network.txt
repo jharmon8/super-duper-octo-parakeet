@@ -11,7 +11,7 @@ $
 # Rates are always Bps
 # Latency is always ms
 # Buffer is always B
-1 2 10000000 10 64000
+1 2 10000000 10 8000
 
 $
 
@@ -19,6 +19,6 @@ $
 # congestion type => 0 is window (of one), 1 is Reno, 2 is FastTCP
 # Data amt is always B
 # delay in miliseconds
-1 2 1024 0 10000 1000
+1 2 1024 0 30000 1000
 
 $

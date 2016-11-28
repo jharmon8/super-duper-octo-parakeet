@@ -34,10 +34,11 @@ public class Network {
 	
 	public void init() {
 		// Setup some streams
-		PrintStream stream;
 		try {
-			stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_routing.txt")));
-			StreamManager.addStream("routing", stream);
+			PrintStream r_stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_routing.txt")));
+			StreamManager.addStream("routing", r_stream);
+			PrintStream p_stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_packet.txt")));
+			StreamManager.addStream("packet", p_stream);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,14 +53,13 @@ public class Network {
 		
 		// start building the routing tables
 //		execBellmanFord();
-		for(Device d : devices) {
-			d.realBroadcast(d.addr, 0, q);
-		}
+//		realBellmanFord();
+		q.add(new Event(Event.Type.BFORD, 0, this));
 	}
 	
 	// returns true if anything happens
 	public boolean tick() {
-		if(q.isEmpty()) {return false;}
+		if(!releveantQ()) {return false;}
 		Event e = q.peek();
 		currTime = e.endTime;
 		q.remove(e);
@@ -86,5 +86,31 @@ public class Network {
 		}
 		
 		return -1;
+	}
+	
+	public void realBellmanFord() {
+		for(Device d : devices) {
+			d.realBroadcast(d.addr, 0, q);
+		}
+	}
+	
+	public boolean releveantQ() {
+		for(Event ev : q) {
+			if(ev.t == Event.Type.TRANS) {
+				if(!ev.p.isRouting) {
+					return true;
+				}
+			}
+			if(ev.t == Event.Type.START) {
+				return true;
+			}
+			if(ev.t == Event.Type.OPPOR) {
+				return true;
+			}
+			if(ev.t == Event.Type.TIMEOUT) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

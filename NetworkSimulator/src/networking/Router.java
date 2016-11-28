@@ -7,7 +7,6 @@ import java.util.PriorityQueue;
 
 import io.StreamManager;
 
-
 public class Router extends Device {
 	RouteTable rt = new RouteTable(this);
 	private int congestion;
@@ -55,7 +54,10 @@ public class Router extends Device {
 			return;
 		}
 		
-		StreamManager.print("routing", Network.currTime + "\t" + this.addr + "\n");
+		if(!p.isAck) {
+			StreamManager.print("routing", Network.currTime + "\t" + this.addr + "\n");
+		}
+		
 		route.addPacket(this, p, q);
 	}
 

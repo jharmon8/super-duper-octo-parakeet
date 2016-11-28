@@ -6,7 +6,7 @@ import java.util.PriorityQueue;
 
 public class Event implements Comparable<Event> {
 	public enum Type {
-		START, OPPOR, TRANS, /*DELAY,*/ COMPL
+		BFORD, START, OPPOR, TRANS, /*DELAY,*/ COMPL, TIMEOUT
 	}
 	
 	public Type t;
@@ -15,6 +15,7 @@ public class Event implements Comparable<Event> {
 	public Link l;
 	public Packet p;
 	public Device d;
+	public Network n;
 	
 	public Event(Type t, double endTime, Link l, Device d, Packet p) {
 		// TODO Auto-generated constructor stub
@@ -32,24 +33,40 @@ public class Event implements Comparable<Event> {
 		this.f = f;
 	}
 	
+	public Event(Type t, double endTime, Network n) {
+		this.t = t;
+		this.endTime = endTime;
+		this.n = n;
+	}
+	
 	// updates the network to complete this event
 	// if a new event is caused, return that event
 	// returns null otherwise
 	public Event resolve(PriorityQueue<Event> q) {
 		// might not need this switch anymore
 		switch(t) {
+		case BFORD:
+			n.realBellmanFord();
+			if(!q.isEmpty()) {
+				Event e = new Event(t.BFORD, n.currTime + 2000, n);
+				q.add(e);
+			}
+			break;
 		case START:
 			f.init(q);
 			break;
-//		case OPPOR:
-//			d.opportunity(q);
-//			break;
+		case OPPOR:
+			d.opportunity(q);
+			break;
 		case TRANS:
 			l.pop(q);
 			break;
 //		case DELAY:
 //			break;
 		case COMPL:
+			break;
+		case TIMEOUT:
+			f.timeout(q);
 			break;
 		default:
 			break;	
@@ -76,15 +93,22 @@ public class Event implements Comparable<Event> {
 		//else {output += "0"; }
 		String output = "Time: " + f.format(endTime);
 		switch(t) {
+		case BFORD:
+			output+= "\nType: " + "BFORD";
+			break;
 		case START:
 			output+= "\nType: " + "START";
 			break;
-//		case OPPOR:
-//			output+= "\nType: " + "OPPOR";
-//			break;
+		case OPPOR:
+			output+= "\nType: " + "OPPOR";
+			break;
 		case TRANS:
 			output+= "\nType: " + "TRANS";
 			break;
+		case TIMEOUT:
+			output+= "\nType: " + "TIMEOUT";
+			break;
+			
 		}
 		
 		if(p != null) {
