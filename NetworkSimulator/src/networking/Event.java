@@ -4,6 +4,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.PriorityQueue;
 
+import io.StreamManager;
+
 public class Event implements Comparable<Event> {
 	public enum Type {
 		BFORD, START, OPPOR, TRANS, /*DELAY,*/ COMPL, TIMEOUT

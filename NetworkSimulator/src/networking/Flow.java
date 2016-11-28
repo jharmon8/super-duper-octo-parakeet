@@ -1,6 +1,8 @@
 package networking;
 
 import java.awt.Graphics;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
@@ -109,9 +111,22 @@ public class Flow {
 
 	public void acknowledge(Packet p, PriorityQueue<Event> q) {
 		// TODO Auto-generated method stub
+		NumberFormat fmt = new DecimalFormat("#0.0000");
+		StreamManager.print("window", fmt.format(Network.currTime) + "\t" + 
+										source.addr + "\t" + 
+										window + "\n");
+		
 		if(p.id > maxPacket) {
 			closeFlow(q);
 			return;
+		}
+		
+		if(p.id > topSent) {
+			topSent = p.id - 1;
+		}
+		
+		if(lastAck == -1) {
+			lastAck = p.id - 1;
 		}
 		
 		setTimeout(q);
@@ -119,14 +134,18 @@ public class Flow {
 		switch(state) {
 		case SLOW_START:
 			windowSaturation -= p.id - lastAck;
-			if(windowSaturation < 0) {windowSaturation = 0;}
+			if(windowSaturation < 0) {
+				windowSaturation = 0;
+				System.err.println("wndSat is negative");
+				System.exit(1);
+			}
 			
+			window += p.id - lastAck;
 			if(p.id == lastAck) {
 				window++;
 				numAck++;
 			} else {
 				numAck = 0;
-				window += p.id - lastAck;
 			}
 			
 			// if we've received 3 acknowlegements for the same packet, retransmit
@@ -135,6 +154,10 @@ public class Flow {
 				
 				// retransmit
 				retransmit(lastAck, q);
+				if(window > 1) {
+					window /= 2;
+				}
+//				timeout(q);
 //				forgetSent(lastAck);
 //				forgetSentPastId(lastAck);
 //				windowThreshold = window / 2;
@@ -142,14 +165,19 @@ public class Flow {
 //				windowSaturation = 0;
 			}
 			
-			if(window > windowThreshold && windowThreshold != -1) {
-				state = State.COLLISION_AVOIDANCE;
+			if(window >= windowThreshold && windowThreshold != -1) {
+				changeState(State.COLLISION_AVOIDANCE);
+//				window = windowThreshold;
 			}
-				
+			
 			break;
 		case FAST_RECOVERY:
 			windowSaturation -= p.id - lastAck;
-			if(windowSaturation < 0) {windowSaturation = 0;}
+			if(windowSaturation < 0) {
+				windowSaturation = 0;
+				System.err.println("wndSat is negative");
+				System.exit(1);
+			}
 			
 			if(p.id == lastAck) {
 				window++;
@@ -158,7 +186,7 @@ public class Flow {
 				numAck = 0;
 				window/=2;
 //				windowSaturation = window - 1;
-				state = State.COLLISION_AVOIDANCE;
+				changeState(State.COLLISION_AVOIDANCE);
 				break;
 			}
 			
@@ -170,20 +198,24 @@ public class Flow {
 			break;
 		case COLLISION_AVOIDANCE:
 			windowSaturation -= p.id - lastAck;
-			if(windowSaturation < 0) {windowSaturation = 0;}
+			if(windowSaturation < 0) {
+				windowSaturation = 0;
+				System.err.println("wndSat is negative");
+				System.exit(1);
+			}
 			
+			window++;
 			if(p.id == lastAck) {
 				numAck++;
 			} else {
 				numAck = 0;
-				window++;
 			}
 			
 			// if we've received 3 acknowlegements for the same packet, retransmit
 			if(numAck >= 3) {
 				numAck = 0;
 				retransmit(lastAck, q);
-				state = State.FAST_RECOVERY;
+				changeState(State.FAST_RECOVERY);
 			}
 			break;
 		}
@@ -267,6 +299,11 @@ public class Flow {
 	}
 	
 	public void timeout(PriorityQueue<Event> q) {
+		NumberFormat fmt = new DecimalFormat("#0.0000");
+		StreamManager.print("window", fmt.format(Network.currTime) + "\t" + 
+										source.addr + "\t" + 
+										window + "\n");
+		
 		System.err.println("Timeout");
 		StreamManager.print("packet", "Timeout\n");
 		
@@ -279,7 +316,8 @@ public class Flow {
 		window = 1;
 		windowSaturation = 0;
 		topSent = lastAck - 1;
-		state = State.SLOW_START;
+		changeState(State.SLOW_START);
+		lastAck = -1;
 		
 		while(windowSaturation < window) {
 			Packet newp = getPacket();
@@ -328,5 +366,22 @@ public class Flow {
 		}*/
 		
 		topSent = id;
+	}
+	
+	private void changeState(State s) {
+		this.state = s;
+		String message = "";
+		switch(state) {
+		case SLOW_START:
+			message = "SLOW_START";
+			break;
+		case FAST_RECOVERY:
+			message = "FAST_RECOVERY";
+			break;
+		case COLLISION_AVOIDANCE:
+			message = "COLLISION_AVOIDANCE";
+			break;
+		}
+		StreamManager.print("packet", message + "\n");
 	}
 }

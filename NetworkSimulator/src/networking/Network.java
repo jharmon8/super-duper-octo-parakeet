@@ -39,6 +39,8 @@ public class Network {
 			StreamManager.addStream("routing", r_stream);
 			PrintStream p_stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_packet.txt")));
 			StreamManager.addStream("packet", p_stream);
+			PrintStream w_stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_window.txt")));
+			StreamManager.addStream("window", w_stream);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
