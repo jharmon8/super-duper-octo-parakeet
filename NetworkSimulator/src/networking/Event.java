@@ -53,6 +53,7 @@ public class Event implements Comparable<Event> {
 				Event e = new Event(t.BFORD, n.currTime + 2000, n);
 				q.add(e);
 			}
+			StreamManager.print("routing", "Recalculating...\n");
 			break;
 		case START:
 			f.init(q);
@@ -76,7 +77,7 @@ public class Event implements Comparable<Event> {
 		
 		
 		// Print a bunch of junk to the graph stream
-		System.out.println(this);
+//		System.out.println(this);
 		
 		return null;
 	}

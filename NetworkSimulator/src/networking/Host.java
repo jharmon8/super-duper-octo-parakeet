@@ -198,4 +198,16 @@ public class Host extends Device {
 		Packet p = new Packet(64, this, dest, dist, 1);
 		link.addPacket(this, p, q);
 	}
+
+	@Override
+	public void printRoutingInfo() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void clearRoutingTable() {
+		// TODO Auto-generated method stub
+		
+	}
 }

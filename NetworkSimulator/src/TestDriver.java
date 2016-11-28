@@ -33,7 +33,9 @@ public class TestDriver {
 		n.init();
 		
 		while(n.tick()) {}
-	}
+
+		System.out.println("Simulation finished.");
+}
 	
 	public static void testCase1() throws IOException {
 		Network n = NetworkLoader.loadNetwork("Test_Case_1.txt");
@@ -42,5 +44,7 @@ public class TestDriver {
 		n.init();
 		
 		while(n.tick()) {}
+		
+		System.out.println("Simulation finished.");
 	}
 }

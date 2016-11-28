@@ -25,6 +25,7 @@ public class Link {
 	// The end time that the last packet will finish transmitting (no delay)
 	// Used when new packets are added to the buffer and need trans events
 	private double bufferEndTime = 0;
+	private int metric = 0;
 	
 	public Link(Device d1, Device d2, int rate, int latency, int maxSize) {
 		this.devices[0] = d1;
@@ -87,7 +88,11 @@ public class Link {
 //		}
 		
 		double transTime = ((double)p.size / rate) * 1000;
-
+		if(!p.isRouting && !p.isAck) {
+			metric += p.size;
+//			System.out.println(metric);
+		}
+		
 		// if this source is the same as the last packet
 		if(sources.size() == 0 || source != sources.get(sources.size() - 1)) {
 			// gotta worry about delay
@@ -145,15 +150,15 @@ public class Link {
 					pack
 			);
 			q.add(e1);
-/*			Event e2 = new Event(
+			Event e2 = new Event(
 					Type.OPPOR,
 //					-1, // I think -1 will ensure the event happens next?
 					Network.currTime,
 					this,
-					dest,
+					src,
 					pack
 			);
-			q.add(e2);*/
+			q.add(e2);
 		}
 	}
 	
@@ -165,5 +170,15 @@ public class Link {
 		} else {
 			devices[0].bfReceive(this, addr, dist);
 		}
+	}
+	
+	public int getMetric() {
+//		int temp = metric;
+//		metric = 0;
+		return metric + 1;
+	}
+	
+	public Device otherDevice(Device devIn) {
+		return devIn == devices[0] ? devices[1] : devices[0];
 	}
 }

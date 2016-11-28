@@ -42,4 +42,7 @@ public abstract class Device {
 	// Informs a host that a link has freed up for transmission
 	public abstract void opportunity(PriorityQueue<Event> q);
 	public abstract void addFlow(Flow f);
+	public abstract void printRoutingInfo();
+
+	public abstract void clearRoutingTable();
 }

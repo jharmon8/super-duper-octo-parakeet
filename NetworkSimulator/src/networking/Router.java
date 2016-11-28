@@ -135,4 +135,16 @@ public class Router extends Device {
 		// TODO Auto-generated method stub
 		// This might be useful when we TCP routing packets
 	}
+
+	@Override
+	public void printRoutingInfo() {
+		// TODO Auto-generated method stub
+		System.out.println(rt);
+	}
+
+	@Override
+	public void clearRoutingTable() {
+		// TODO Auto-generated method stub
+		rt = new RouteTable(this);
+	}
 }

@@ -19,7 +19,7 @@ public class Flow {
 	int numAck = 0;
 	private State state = State.SLOW_START;
 	int windowThreshold = -1;
-	double timeoutTime = 1000;
+	double timeoutTime = 500;
 	int maxPacket;
 	
 	public enum State {
@@ -111,10 +111,10 @@ public class Flow {
 
 	public void acknowledge(Packet p, PriorityQueue<Event> q) {
 		// TODO Auto-generated method stub
-		NumberFormat fmt = new DecimalFormat("#0.0000");
+/*		NumberFormat fmt = new DecimalFormat("#0.0000");
 		StreamManager.print("window", fmt.format(Network.currTime) + "\t" + 
 										source.addr + "\t" + 
-										window + "\n");
+										window + "\n");*/
 		
 		if(p.id > maxPacket) {
 			closeFlow(q);
@@ -129,17 +129,17 @@ public class Flow {
 			lastAck = p.id - 1;
 		}
 		
+		windowSaturation -= p.id - lastAck;
+		if(windowSaturation < 0) {
+			windowSaturation = 0;
+//			System.err.println("wndSat is negative");
+//			System.exit(1);
+		}
+		
 		setTimeout(q);
 		
 		switch(state) {
 		case SLOW_START:
-			windowSaturation -= p.id - lastAck;
-			if(windowSaturation < 0) {
-				windowSaturation = 0;
-				System.err.println("wndSat is negative");
-				System.exit(1);
-			}
-			
 			window += p.id - lastAck;
 			if(p.id == lastAck) {
 				window++;
@@ -156,6 +156,7 @@ public class Flow {
 				retransmit(lastAck, q);
 				if(window > 1) {
 					window /= 2;
+					windowThreshold = window;
 				}
 //				timeout(q);
 //				forgetSent(lastAck);
@@ -165,26 +166,20 @@ public class Flow {
 //				windowSaturation = 0;
 			}
 			
-			if(window >= windowThreshold && windowThreshold != -1) {
+			if(window > windowThreshold && windowThreshold != -1) {
 				changeState(State.COLLISION_AVOIDANCE);
-//				window = windowThreshold;
+				window = windowThreshold;
 			}
 			
 			break;
 		case FAST_RECOVERY:
-			windowSaturation -= p.id - lastAck;
-			if(windowSaturation < 0) {
-				windowSaturation = 0;
-				System.err.println("wndSat is negative");
-				System.exit(1);
-			}
-			
 			if(p.id == lastAck) {
 				window++;
 				numAck++;
 			} else {
 				numAck = 0;
 				window/=2;
+				windowThreshold = window;
 //				windowSaturation = window - 1;
 				changeState(State.COLLISION_AVOIDANCE);
 				break;
@@ -197,13 +192,6 @@ public class Flow {
 			}
 			break;
 		case COLLISION_AVOIDANCE:
-			windowSaturation -= p.id - lastAck;
-			if(windowSaturation < 0) {
-				windowSaturation = 0;
-				System.err.println("wndSat is negative");
-				System.exit(1);
-			}
-			
 			window++;
 			if(p.id == lastAck) {
 				numAck++;
@@ -215,6 +203,7 @@ public class Flow {
 			if(numAck >= 3) {
 				numAck = 0;
 				retransmit(lastAck, q);
+				topSent = lastAck;
 				changeState(State.FAST_RECOVERY);
 			}
 			break;
@@ -239,6 +228,7 @@ public class Flow {
 		for(Event e : q) {
 			if(e.t == Event.Type.TIMEOUT && e.f == this) {
 				q.remove(e);
+				break;
 			}
 		}
 	}
@@ -247,6 +237,9 @@ public class Flow {
 		int nextId = id;
 		if(nextId <= maxPacket) {
 			Packet p = new Packet(packetSize, source, dest, this, nextId);
+			if(nextId > topSent) {
+//				topSent = nextId;
+			}
 			return p;
 		}
 		
@@ -299,10 +292,10 @@ public class Flow {
 	}
 	
 	public void timeout(PriorityQueue<Event> q) {
-		NumberFormat fmt = new DecimalFormat("#0.0000");
+/*		NumberFormat fmt = new DecimalFormat("#0.0000");
 		StreamManager.print("window", fmt.format(Network.currTime) + "\t" + 
 										source.addr + "\t" + 
-										window + "\n");
+										window + "\n");*/
 		
 		System.err.println("Timeout");
 		StreamManager.print("packet", "Timeout\n");
@@ -336,6 +329,7 @@ public class Flow {
 		for(Event e : q) {
 			if(e.t == Event.Type.TIMEOUT && e.f == this) {
 				q.remove(e);
+				break;
 			}
 		}
 		

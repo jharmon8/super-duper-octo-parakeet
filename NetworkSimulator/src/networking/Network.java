@@ -5,6 +5,8 @@ import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
@@ -41,6 +43,8 @@ public class Network {
 			StreamManager.addStream("packet", p_stream);
 			PrintStream w_stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_window.txt")));
 			StreamManager.addStream("window", w_stream);
+			PrintStream t_stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_threshold.txt")));
+			StreamManager.addStream("threshold", t_stream);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,11 +68,32 @@ public class Network {
 		if(!releveantQ()) {return false;}
 		Event e = q.peek();
 		currTime = e.endTime;
+		logStatsEarly();
 		q.remove(e);
 		e.resolve(q);
+		logStats();
+		if(e.t == Event.Type.BFORD) {
+			for(Device dev : devices) {
+				dev.printRoutingInfo();
+			}
+		}
 		return true;
 	}
 	
+	private void logStatsEarly() {
+		// TODO Auto-generated method stub
+		Flow flow = flows.get(0);
+		NumberFormat fmt = new DecimalFormat("#0.0000");
+		StreamManager.print("window", fmt.format(currTime - .0001) + "\t" + flow.window + "\t" + (flow.windowThreshold < 0 ? 0 : flow.windowThreshold) + "\n");
+	}
+
+	private void logStats() {
+		// TODO Auto-generated method stub
+		Flow flow = flows.get(0);
+		NumberFormat fmt = new DecimalFormat("#0.0000");
+		StreamManager.print("window", fmt.format(currTime) + "\t" + flow.window + "\t" + (flow.windowThreshold < 0 ? 0 : flow.windowThreshold) + "\n");
+	}
+
 	public void draw(Graphics g, int w, int h) {
 		for(Link l : links) {
 			l.draw(g);
@@ -92,6 +117,7 @@ public class Network {
 	
 	public void realBellmanFord() {
 		for(Device d : devices) {
+			d.clearRoutingTable();
 			d.realBroadcast(d.addr, 0, q);
 		}
 	}

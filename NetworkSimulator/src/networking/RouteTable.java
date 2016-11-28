@@ -10,6 +10,7 @@ public class RouteTable {
 	
 	public RouteTable(Router r) {
 		this.r = r;
+		t.add(new TableEntry(r.addr, null, 0));
 	}
 	
 	public Link getRoute(String addr) {
@@ -33,31 +34,25 @@ public class RouteTable {
 
 	public void update(Link l, String dest, int dist, PriorityQueue<Event> q) {
 		// TODO Auto-generated method stub
-		int oldDist = -1;
-		
+		TableEntry entry = null;
 		for(TableEntry e : t) {
 			if(e.addr.equals(dest)) {
-				oldDist = e.dist;
+				entry = e;
 				break;
 			}
 		}
 		
-		if(oldDist == -1) {
-			t.add(new TableEntry(dest, l, dist + 1));
-			r.realBroadcast(dest, dist + 1, q);
+		if(entry == null) {
+			t.add(new TableEntry(dest, l, dist + l.getMetric()));
+			r.realBroadcast(dest, dist + l.getMetric(), q);
 			return;
 		}
 		
-		if(oldDist > dist) {
-			for(TableEntry e : t) {
-				if(e.addr.equals(dest)) {
-					e.l = l;
-					e.dist = dist;
-					t.add(new TableEntry(dest, l, dist + 1));
-					r.realBroadcast(dest, dist + 1, q);
-					break;
-				}
-			}
+		if(dist + l.getMetric() < entry.dist) {
+			entry.l = l;
+			entry.dist = dist + l.getMetric();
+			System.out.println(entry.dist);
+			r.realBroadcast(entry.addr, entry.dist, q);
 		}
 	}
 	
@@ -71,5 +66,20 @@ public class RouteTable {
 			this.l = l;
 			this.dist = dist;
 		}
+	}
+	
+	@Override
+	public String toString() {
+		String output = "";
+		output+=r.addr + "\n";
+		for(TableEntry e : t) {
+			if(e.l == null) {
+				output += "\t" + e.addr + ", " + e.dist + "\t" + r.addr + "\n";
+			} else {
+				output += "\t" + e.addr + ", " + e.dist + "\t" + e.l.otherDevice(r).addr + "\n";
+			}
+		}
+		
+		return output;
 	}
 }
