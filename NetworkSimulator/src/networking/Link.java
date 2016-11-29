@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
@@ -23,6 +24,9 @@ public class Link {
 	LinkedList<Packet> buffer = new LinkedList<Packet>();
 	LinkedList<Device> sources = new LinkedList<Device>();
 	
+	LinkedList<MetricPair> metrics = new LinkedList<MetricPair>();
+	private double timeToConsider = 400;
+	
 	// The end time that the last packet will finish transmitting (no delay)
 	// Used when new packets are added to the buffer and need trans events
 	private double bufferEndTime = 0;
@@ -34,6 +38,7 @@ public class Link {
 		this.rate = rate;
 		this.latency = latency;
 		this.maxSize = maxSize;
+		this.metrics.add(new MetricPair(0,0));
 	}
 	
 	public Link(Device d1, Device d2, String rate, String latency, String maxSize) {
@@ -42,6 +47,7 @@ public class Link {
 		this.rate = Integer.parseInt(rate);
 		this.latency = Integer.parseInt(latency);
 		this.maxSize = Integer.parseInt(maxSize);
+		this.metrics.add(new MetricPair(0,0));
 	}
 	
 	public boolean containsDevice(Device d) {
@@ -127,8 +133,27 @@ public class Link {
 		// add the packet and source to buffer
 		buffer.add(p);
 		sources.add(source);
+		
+		updateMetrics(Network.currTime, getBufferOccupancy());
 	}
 	
+	private void updateMetrics(double currTime, int metric) {
+		// TODO Auto-generated method stub
+		ArrayList<MetricPair> toRemove = new ArrayList<MetricPair>();
+
+		for(MetricPair m : metrics) {
+			if(m.time < currTime - timeToConsider) {
+				toRemove.add(m);
+			}
+		}
+		
+		for(MetricPair m : toRemove) {
+			metrics.remove(m);
+		}
+		
+		metrics.add(new MetricPair(currTime, metric));
+	}
+
 	// Send the top packet on the buffer on its merry way
 	public void pop(PriorityQueue<Event> q) {
 		
@@ -176,6 +201,15 @@ public class Link {
 //		return metric + 1;
 //		return (int) ((double) bufferSaturation / rate) * 1000 + 1;
 		return getBufferOccupancy() + 1;
+		
+		/*int count = 0;
+		int total = 1;
+		for(MetricPair m : metrics) {
+			count++;
+			total+=m.m;
+		}
+		
+		return total / count;*/
 	}
 	
 	public Device otherDevice(Device devIn) {
@@ -194,5 +228,15 @@ public class Link {
 	@Override
 	public String toString() {
 		return devices[0].addr + ":" + devices[1].addr;
+	}
+	
+	private class MetricPair {
+		double time;
+		int m;
+		
+		public MetricPair(double t, int m) {
+			this.time = t;
+			this.m = m;
+		}
 	}
 }

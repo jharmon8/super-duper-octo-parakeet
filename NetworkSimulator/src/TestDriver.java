@@ -11,7 +11,7 @@ import networking.Network;
 
 public class TestDriver {
 	public static void main(String[] args) throws IOException {
-		testCase2();
+		testCase1();
 	}
 	
 	public static void testNetworkViewer() throws IOException {
