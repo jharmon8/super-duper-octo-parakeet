@@ -53,7 +53,7 @@ public class Event implements Comparable<Event> {
 		case BFORD:
 			n.realBellmanFord();
 			if(!q.isEmpty()) {
-				Event e = new Event(t.BFORD, n.currTime + 1000 + rand.nextInt(100), n);
+				Event e = new Event(Type.BFORD, Network.currTime + 1000 + rand.nextInt(100), n);
 				q.add(e);
 			}
 //			StreamManager.print("routing", "Recalculating...\n");

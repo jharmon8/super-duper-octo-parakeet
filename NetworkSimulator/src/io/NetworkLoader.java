@@ -102,7 +102,16 @@ public class NetworkLoader {
 					System.exit(1);
 				}
 				
-				Flow flow = new Flow(source, dest, split[2], split[3], split[4], split[5]);
+				Flow flow = null;
+				switch(Integer.parseInt(split[3])) {
+				case 1:
+					flow = new RenoFlow(source, dest, split[2], split[4], split[5]);
+					break;
+				case 2:
+					flow = new FastFlow(source, dest, split[2], split[4], split[5]);
+					break;
+				}
+				
 				f.add(flow);
 				source.addFlow(flow);
 				break;

@@ -35,6 +35,26 @@ public class Packet {
 		this.id = id;
 	}
 	
+/*	public Packet(int size, Device source, Device dest, Flow f, int id, int fastWave) {
+		this.source = source;
+		this.dest = dest;
+		this.size = size;
+		this.f = f;
+		this.isAck = false;
+		this.isRouting = false;
+		this.id = id;
+	}
+	
+	public Packet(int size, Device source, Device dest, Flow f, boolean ack, int id) {
+		this.source = source;
+		this.dest = dest;
+		this.size = size;
+		this.f = f;
+		this.isAck = ack;
+		this.isRouting = false;
+		this.id = id;
+	}*/
+	
 	public Packet(int size, Device source, String destAddr, int distance, int id) {
 		this.size = size;
 		this.source = source;
@@ -51,5 +71,10 @@ public class Packet {
 		this.isAck = ack;
 		this.isRouting = true;
 		this.id = id;
+	}
+	
+	@Override
+	public String toString() {
+		return "" + id + (isAck ? " ACK" : " DATA");
 	}
 }

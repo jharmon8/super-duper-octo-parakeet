@@ -163,7 +163,7 @@ public class Link {
 		
 		dest.route(this, pack, q);
 		
-		if(buffer.isEmpty()) {
+		if(isOppor()) {
 			Event e1 = new Event(
 					Type.OPPOR,
 //					-1, // I think -1 will ensure the event happens next?
@@ -195,21 +195,32 @@ public class Link {
 		}
 	}
 	
+	public boolean isOppor() {
+		for(Packet p : buffer) {
+			if(!p.isRouting) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
 	public int getMetric() {
 //		int temp = metric;
 //		metric = 0;
 //		return metric + 1;
 //		return (int) ((double) bufferSaturation / rate) * 1000 + 1;
-		return getBufferOccupancy() + 1;
+
+//		return getBufferOccupancy() + 1;
 		
-		/*int count = 0;
+		int count = 0;
 		int total = 1;
 		for(MetricPair m : metrics) {
 			count++;
 			total+=m.m;
 		}
 		
-		return total / count;*/
+		return total / count;
 	}
 	
 	public Device otherDevice(Device devIn) {
