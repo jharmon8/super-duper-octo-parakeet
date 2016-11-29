@@ -11,7 +11,7 @@ import networking.Network;
 
 public class TestDriver {
 	public static void main(String[] args) throws IOException {
-		testCase0();
+		testCase2();
 	}
 	
 	public static void testNetworkViewer() throws IOException {
@@ -35,10 +35,21 @@ public class TestDriver {
 		while(n.tick()) {}
 
 		System.out.println("Simulation finished.");
-}
+	}
 	
 	public static void testCase1() throws IOException {
 		Network n = NetworkLoader.loadNetwork("Test_Case_1.txt");
+		NetworkViewer.launchViewer(n); 
+		System.out.println(n);
+		n.init();
+		
+		while(n.tick()) {}
+		
+		System.out.println("Simulation finished.");
+	}
+
+	public static void testCase2() throws IOException {
+		Network n = NetworkLoader.loadNetwork("Test_Case_2.txt");
 		NetworkViewer.launchViewer(n); 
 		System.out.println(n);
 		n.init();

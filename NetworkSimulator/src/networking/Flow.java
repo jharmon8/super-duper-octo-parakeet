@@ -220,6 +220,8 @@ public class Flow {
 		}
 		
 		lastAck = p.id;
+		Network.debug1 = topSent;
+		Network.debug2 = lastAck;
 		return;
 	}
 	
@@ -377,5 +379,10 @@ public class Flow {
 			break;
 		}
 		StreamManager.print("packet", message + "\n");
+	}
+	
+	@Override
+	public String toString() {
+		return source.addr + ":" + dest.addr;
 	}
 }

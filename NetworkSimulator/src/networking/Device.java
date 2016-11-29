@@ -45,4 +45,9 @@ public abstract class Device {
 	public abstract void printRoutingInfo();
 
 	public abstract void clearRoutingTable();
+	
+	@Override
+	public String toString() {
+		return addr;
+	}
 }

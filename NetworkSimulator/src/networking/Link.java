@@ -1,13 +1,14 @@
 package networking;
 
+import io.StreamManager;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
 
-import io.StreamManager;
 import networking.Event.Type;
 
 public class Link {
@@ -19,8 +20,8 @@ public class Link {
 	
 	// the buffer and corresponding sources of each packet
 	// (to keep track of directionality)
-	ArrayList<Packet> buffer = new ArrayList<Packet>();
-	ArrayList<Device> sources = new ArrayList<Device>();
+	LinkedList<Packet> buffer = new LinkedList<Packet>();
+	LinkedList<Device> sources = new LinkedList<Device>();
 	
 	// The end time that the last packet will finish transmitting (no delay)
 	// Used when new packets are added to the buffer and need trans events
@@ -75,10 +76,7 @@ public class Link {
 		
 		// maaaaaaan fuck that
 //		if(!dest.isHost()) {
-			int bufferSaturation = 0;
-			for(Packet packet : buffer) {
-				bufferSaturation += packet.size;
-			}
+			int bufferSaturation = getBufferOccupancy();
 			if(bufferSaturation + p.size > maxSize) { 
 				System.err.println("packet dropped");
 				NumberFormat f = new DecimalFormat("#0.0000");
@@ -175,10 +173,26 @@ public class Link {
 	public int getMetric() {
 //		int temp = metric;
 //		metric = 0;
-		return metric + 1;
+//		return metric + 1;
+//		return (int) ((double) bufferSaturation / rate) * 1000 + 1;
+		return getBufferOccupancy() + 1;
 	}
 	
 	public Device otherDevice(Device devIn) {
 		return devIn == devices[0] ? devices[1] : devices[0];
+	}
+
+	public int getBufferOccupancy() {
+		// TODO Auto-generated method stub
+		int bufferSaturation = 0;
+		for(Packet packet : buffer) {
+			bufferSaturation += packet.size;
+		}
+		return bufferSaturation;
+	}
+	
+	@Override
+	public String toString() {
+		return devices[0].addr + ":" + devices[1].addr;
 	}
 }

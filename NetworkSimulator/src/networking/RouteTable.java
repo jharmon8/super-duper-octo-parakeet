@@ -33,7 +33,7 @@ public class RouteTable {
 	}
 
 	public void update(Link l, String dest, int dist, PriorityQueue<Event> q) {
-		// TODO Auto-generated method stub
+		// find entry
 		TableEntry entry = null;
 		for(TableEntry e : t) {
 			if(e.addr.equals(dest)) {
@@ -42,16 +42,24 @@ public class RouteTable {
 			}
 		}
 		
+		// entry doesn't exist
 		if(entry == null) {
 			t.add(new TableEntry(dest, l, dist + l.getMetric()));
 			r.realBroadcast(dest, dist + l.getMetric(), q);
 			return;
 		}
 		
+		// entry needs updated
+		if(entry.l == l) {
+			entry.dist = dist + l.getMetric();
+			r.realBroadcast(entry.addr, entry.dist, q);
+			return;
+		}
+		
+		// update is better than current entry
 		if(dist + l.getMetric() < entry.dist) {
 			entry.l = l;
 			entry.dist = dist + l.getMetric();
-			System.out.println(entry.dist);
 			r.realBroadcast(entry.addr, entry.dist, q);
 		}
 	}

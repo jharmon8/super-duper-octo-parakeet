@@ -3,6 +3,7 @@ package networking;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.PriorityQueue;
+import java.util.Random;
 
 import io.StreamManager;
 
@@ -18,6 +19,8 @@ public class Event implements Comparable<Event> {
 	public Packet p;
 	public Device d;
 	public Network n;
+	private static Random rand = new Random(1234567);
+	
 	
 	public Event(Type t, double endTime, Link l, Device d, Packet p) {
 		// TODO Auto-generated constructor stub
@@ -50,10 +53,10 @@ public class Event implements Comparable<Event> {
 		case BFORD:
 			n.realBellmanFord();
 			if(!q.isEmpty()) {
-				Event e = new Event(t.BFORD, n.currTime + 2000, n);
+				Event e = new Event(t.BFORD, n.currTime + 1000 + rand.nextInt(100), n);
 				q.add(e);
 			}
-			StreamManager.print("routing", "Recalculating...\n");
+//			StreamManager.print("routing", "Recalculating...\n");
 			break;
 		case START:
 			f.init(q);
@@ -111,7 +114,6 @@ public class Event implements Comparable<Event> {
 		case TIMEOUT:
 			output+= "\nType: " + "TIMEOUT";
 			break;
-			
 		}
 		
 		if(p != null) {

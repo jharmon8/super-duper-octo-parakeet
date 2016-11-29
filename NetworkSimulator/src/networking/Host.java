@@ -15,7 +15,7 @@ public class Host extends Device {
 	private String hostname;
 	
 	private ArrayList<Packet> received = new ArrayList<Packet>();
-	private int lastAck = -1;
+	private int lastAck = 1;
 	private final int ACK_SIZE = 64;
 	private boolean needSendAck = false;
 	
@@ -147,7 +147,7 @@ public class Host extends Device {
 //		}
 		if(needSendAck) {
 			sendAcknowledgement(q);
-			lastAck = getAckId();
+//			lastAck = getAckId();
 			needSendAck = false;
 		}
 		
@@ -173,8 +173,9 @@ public class Host extends Device {
 	
 	private int getAckId() {
 		if(received.isEmpty()) {return -1;}
-		
-		int i = 1;
+		ArrayList<Packet> toRemove = new ArrayList<Packet>();
+
+		int i = lastAck;
 		
 		while(true) {
 			boolean found = false;
@@ -182,6 +183,7 @@ public class Host extends Device {
 				if(p.id == i) {
 					i++;
 					found = true;
+					toRemove.add(p);
 					break;
 				}
 			}
@@ -189,7 +191,17 @@ public class Host extends Device {
 			if(!found) {break;}
 		}
 		
+		if(!toRemove.isEmpty()) {
+			toRemove.remove(toRemove.size() - 1);
+			cleanReceived(toRemove);
+		}
+		
+		lastAck = i;
 		return i;
+	}
+	
+	private void cleanReceived(ArrayList<Packet> toRemove) {
+		
 	}
 
 	@Override
