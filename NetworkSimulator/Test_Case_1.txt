@@ -27,6 +27,6 @@ $
 # Packet size is always bytes
 # window size
 # Data amt is always B
-1 2 1024 1 6000000 1500
+1 2 1024 1 20000000 500
 
 $
