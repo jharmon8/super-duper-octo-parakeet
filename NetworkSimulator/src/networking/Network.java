@@ -7,11 +7,14 @@ import java.awt.Graphics;
 import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
+
+import io.NetworkSaver;
 
 public class Network {
 	// metadata
@@ -37,6 +40,16 @@ public class Network {
 		
 		q = new PriorityQueue<Event>();
 	}
+	
+/*	public Network() {
+		time = -3;
+		
+		devices = new ArrayList<Device>();
+		links = new ArrayList<Link>();
+		flows = new ArrayList<Flow>();
+		
+		q = new PriorityQueue<Event>();
+	}*/
 	
 	public void init() {
 		// Setup some streams
@@ -164,5 +177,9 @@ public class Network {
 			}
 		}
 		return false;
+	}
+	
+	public boolean saveNetwork(String filename) throws IOException {
+		return NetworkSaver.saveNetwork(devices, links, flows, filename);
 	}
 }

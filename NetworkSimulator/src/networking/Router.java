@@ -9,22 +9,19 @@ import io.StreamManager;
 
 public class Router extends Device {
 	RouteTable rt = new RouteTable(this);
-	private int congestion;
 	
-	public Router(String addr, String x, String y, String cong) {
+	public Router(String addr, String x, String y) {
 		// TODO Auto-generated constructor stub
 		super(addr);
 		this.x = Integer.parseInt(x);
 		this.y = Integer.parseInt(y);
-		this.congestion = Integer.parseInt(cong);
 	}
 	
-	public Router(String addr, int x, int y, int cong) {
+	public Router(String addr, int x, int y) {
 		// TODO Auto-generated constructor stub
 		super(addr);
 		this.x = x;
 		this.y = y;
-		this.congestion = cong;
 	}
 
 	@Override
@@ -146,5 +143,13 @@ public class Router extends Device {
 	public void clearRoutingTable() {
 		// TODO Auto-generated method stub
 		rt = new RouteTable(this);
+	}
+
+	@Override
+	public String exportString() {
+		// TODO Auto-generated method stub
+		String output = "2 " + addr + " " + x + " " + y;
+		
+		return output;
 	}
 }

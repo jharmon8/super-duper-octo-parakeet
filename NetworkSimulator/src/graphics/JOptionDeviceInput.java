@@ -85,7 +85,7 @@ public class JOptionDeviceInput extends JPanel implements ActionListener {
 		if(hostButton.isSelected()) {
 			return new Host(addr.getText(), x, y, hostname.getText());
 		} else if(routerButton.isSelected()) {
-			return new Router(addr.getText(), x, y, 0);
+			return new Router(addr.getText(), x, y);
 		}
 		
 		return null;

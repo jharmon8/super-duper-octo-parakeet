@@ -59,7 +59,7 @@ public class NetworkLoader {
 					Device dev = new Host(split[1], split[2], split[3], split[4]);
 					d.add(dev);
 				} else if(split[0].equals("2")) {
-					Device dev = new Router(split[1], split[2], split[3], split[4]);
+					Device dev = new Router(split[1], split[2], split[3]);
 					d.add(dev);
 				} else {
 					System.err.println("unknown device type");

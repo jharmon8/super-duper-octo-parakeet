@@ -385,4 +385,15 @@ public class Flow {
 	public String toString() {
 		return source.addr + ":" + dest.addr;
 	}
+	
+	public String exportString() {
+		// TODO Auto-generated method stub
+		String output = source.addr + " " + 
+						dest.addr + " " + 
+						packetSize + " " + 
+						congestionType + " " + 
+						dataAmt + " " + 
+						delay;
+		return output;
+	}
 }

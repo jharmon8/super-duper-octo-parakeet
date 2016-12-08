@@ -239,4 +239,15 @@ public class Link {
 			this.m = m;
 		}
 	}
+
+	public String exportString() {
+		// TODO Auto-generated method stub
+		String output = devices[0].addr + " " + 
+						devices[1].addr + " " + 
+						rate + " " +
+						latency + " " +
+						maxSize;
+		
+		return output;
+	}
 }

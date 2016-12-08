@@ -23,6 +23,7 @@ public abstract class Device {
 	public abstract boolean isHost();
 	public abstract void broadcast(Device dest, int dist);
 	public abstract void realBroadcast(String dest, int dist, PriorityQueue<Event> q);
+	public abstract String exportString();
 
 	public void drawSelection(Graphics g) {
 		int size = 20;

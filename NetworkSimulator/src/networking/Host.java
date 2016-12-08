@@ -222,4 +222,15 @@ public class Host extends Device {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public String exportString() {
+		// TODO Auto-generated method stub
+		String output = "1 " + addr + " " + x + " " + y;
+		if(!hostname.equals("<no name>")) {
+			output += " " + hostname;
+		}
+		
+		return output;
+	}
 }
