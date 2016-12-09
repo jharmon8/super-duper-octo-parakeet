@@ -30,6 +30,7 @@ public class Network {
 	
 	public static int debug1 = 0;
 	public static int debug2 = 0;
+	public static String debug3 = "";
 	
 	public Network(int time, ArrayList<Device> d, ArrayList<Link> l, ArrayList<Flow> f) {
 		this.time = time;
@@ -149,7 +150,8 @@ public class Network {
 		g.setColor(Color.black);
 		g.drawString(""+debug1, 10, 10);
 		g.drawString(""+debug2, 10, 25);
-		g.drawString(""+(int)currTime, 10, 40);
+		g.drawString(debug3, 10, 40);
+		g.drawString(""+(int)currTime, 10, 55);
 	}
 
 	// Setup the routing tables

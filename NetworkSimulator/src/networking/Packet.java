@@ -14,6 +14,7 @@ public class Packet {
 	boolean isRouting;
 	String destAddr;
 	int dist;	
+	int batch = -1;
 	
 	public Packet(int size, Device source, Device dest, Flow f, int id) {
 		this.source = source;

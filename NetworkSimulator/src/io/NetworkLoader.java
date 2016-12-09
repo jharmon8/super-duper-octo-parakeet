@@ -56,12 +56,7 @@ public class NetworkLoader {
 			case 1:
 				split = line.split(" ");
 				if(split[0].equals("1")) {
-					Device dev = null;
-					if(split.length < 5) {
-						dev = new Host(split[1], split[2], split[3]);
-					} else {
-						dev = new Host(split[1], split[2], split[3], split[4]);
-					}
+					Device dev = new Host(split[1], split[2], split[3], split[4]);
 					d.add(dev);
 				} else if(split[0].equals("2")) {
 					Device dev = new Router(split[1], split[2], split[3]);
@@ -107,7 +102,16 @@ public class NetworkLoader {
 					System.exit(1);
 				}
 				
-				Flow flow = new Flow(source, dest, split[2], split[3], split[4], split[5]);
+				Flow flow = null;
+				switch(Integer.parseInt(split[3])) {
+				case 1:
+					flow = new RenoFlow(source, dest, split[2], split[4], split[5]);
+					break;
+				case 2:
+					flow = new FastFlow(source, dest, split[2], split[4], split[5]);
+					break;
+				}
+				
 				f.add(flow);
 				source.addFlow(flow);
 				break;

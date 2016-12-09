@@ -250,7 +250,7 @@ plt.ylabel('Link Rate (fraction)')
 plt.subplot(614) # ----------------------------------------------
 print("graphing 4")
 
-new_loss_data = loss_data
+# new_loss_data = loss_data
 
 # for entry in loss_data:
 # 	new_entry = (entry[0], ([], []))
@@ -260,11 +260,11 @@ new_loss_data = loss_data
 # 	new_loss_data.append(new_entry)
 
 ymax = 0
-for data in new_loss_data:
+for data in loss_data:
 	ymax = max(ymax, max(data[1][1]))
 
 handles = []
-for entry in new_loss_data:
+for entry in loss_data:
 	c, = plt.plot(entry[1][0], entry[1][1], label=entry[0])
 	handles.append(c)
 
@@ -325,7 +325,7 @@ plt.legend(handles=handles)
 
 plt.axis([0, xmax * 1.05, 0, ymax * 1.05])
 plt.xlabel('Time (ms)')
-plt.ylabel('Delay (ms)')
+plt.ylabel('Delay')
 
 # ----------------------------------------------------------------
 

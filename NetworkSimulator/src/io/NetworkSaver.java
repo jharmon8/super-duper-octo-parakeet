@@ -55,9 +55,9 @@ public class NetworkSaver {
 		StreamManager.print("export", "\n$\n\n");
 		
 		// flows
-		for(Flow f : flows) {
-			StreamManager.print("export", f.exportString() + "\n");
-		}
+//		for(Flow f : flows) {
+//			StreamManager.print("export", f.exportString() + "\n");
+//		}
 		
 		StreamManager.print("export", "\n$\n\n");
 		

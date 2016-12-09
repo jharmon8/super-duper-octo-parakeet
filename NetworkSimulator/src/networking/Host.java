@@ -165,6 +165,7 @@ public class Host extends Device {
 		// on your merry way, now!
 		Packet p = received.get(0);
 		Packet ack = new Packet(ACK_SIZE, this, p.source, p.f, true, getAckId());
+		ack.batch = p.batch;
 		link.addPacket(this, ack, q);
 //		NumberFormat f = new DecimalFormat("#0.0000");
 //		StreamManager.print("packet", f.format(Network.currTime) + "\t" + addr + "\t" + ack.id + "\n");

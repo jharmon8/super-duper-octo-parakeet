@@ -116,13 +116,13 @@ public class NetworkGenerator {
 			
 			boolean valid = true;
 			for(Flow f : flows) {
-				if(f.entails(src) || f.entails(dest)) {
-					valid = false;
-				}
+//				if(f.entails(src) || f.entails(dest)) {
+//					valid = false;
+//				}
 			}
 			if(!valid) { continue; }
 			
-			flows.add(new Flow(src, dest, FLOW_PSIZE, FLOW_CONGT, FLOW_D_AMT, FLOW_DELAY));
+//			flows.add(new Flow(src, dest, FLOW_PSIZE, FLOW_CONGT, FLOW_D_AMT, FLOW_DELAY));
 		}
 		
 		// Export

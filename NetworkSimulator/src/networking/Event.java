@@ -54,7 +54,7 @@ public class Event implements Comparable<Event> {
 //			StreamManager.print("routing", "Recalculating...\n");
 			n.realBellmanFord();
 			if(!q.isEmpty()) {
-				Event e = new Event(t.BFORD, n.currTime + 8000, n);
+				Event e = new Event(t.BFORD, n.currTime + 10000, n);
 				q.add(e);
 			}
 			break;
