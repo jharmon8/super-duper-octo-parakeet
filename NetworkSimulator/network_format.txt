@@ -1,4 +1,4 @@
-Overview:
+OVERVIEW:
 # are comments, blank lines are ignored
 Broken into sections (metadata, devices, links, flows) delimited by $ that give information
 
@@ -52,7 +52,7 @@ $
 # Packet size is always bytes
 # window size
 # Data amt is always B
-# flow format: address 1, address 2, packet size, window size, data amount, flow start
+# flow format: address 1, address 2, packet size, congestion type, data amount, flow start
 
 
 1 2 1024 1 20000000 500
