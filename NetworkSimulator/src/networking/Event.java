@@ -51,12 +51,12 @@ public class Event implements Comparable<Event> {
 		// might not need this switch anymore
 		switch(t) {
 		case BFORD:
+//			StreamManager.print("routing", "Recalculating...\n");
 			n.realBellmanFord();
 			if(!q.isEmpty()) {
-				Event e = new Event(t.BFORD, n.currTime + 1000 + rand.nextInt(100), n);
+				Event e = new Event(t.BFORD, n.currTime + 8000, n);
 				q.add(e);
 			}
-//			StreamManager.print("routing", "Recalculating...\n");
 			break;
 		case START:
 			f.init(q);

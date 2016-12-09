@@ -1,5 +1,6 @@
 package networking;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -15,7 +16,9 @@ public class Flow {
 	int windowSaturation = 0;
 //	ArrayList<Packet> sent = new ArrayList<Packet>();
 	int lastAck = 1;
+	int maxAck = 0;
 	int topSent = 0;
+	int recoveryThreshold = 0;
 	int numAck = 0;
 	private State state = State.SLOW_START;
 	int windowThreshold = -1;
@@ -52,7 +55,14 @@ public class Flow {
 
 	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
+		g.setColor(new Color(0, 255, 0, 140));
+		g.fillOval(source.x - 10, source.y - 10, 20, 20);
 		
+//		int arcWidth = Math.abs(dest.x - source.x);
+//		int arcHeight = Math.abs(dest.y - source.y);
+//		g.fillArc(source.x, source.y, arcWidth, arcHeight, 0, 180);
+//		g.drawArc(100, 100, 100, 100, 180, 180);
+		g.drawLine(source.x, source.y, dest.x, dest.y);
 	}
 	
 	// Send first packet by putting trans event on q
@@ -111,8 +121,8 @@ public class Flow {
 
 	public void acknowledge(Packet p, PriorityQueue<Event> q) {
 		// TODO Auto-generated method stub
-/*		NumberFormat fmt = new DecimalFormat("#0.0000");
-		StreamManager.print("window", fmt.format(Network.currTime) + "\t" + 
+		NumberFormat fmt = new DecimalFormat("#0.0000");
+/*		StreamManager.print("window", fmt.format(Network.currTime) + "\t" + 
 										source.addr + "\t" + 
 										window + "\n");*/
 		
@@ -129,7 +139,13 @@ public class Flow {
 			lastAck = p.id - 1;
 		}
 		
-		windowSaturation -= p.id - lastAck;
+		if(p.id > maxAck) {
+			StreamManager.print("flow", fmt.format(Network.currTime) + "\t" + this.toString() + "\t" + (p.id - maxAck) + "\n");
+			maxAck = p.id;
+		}
+		
+//		windowSaturation -= p.id - lastAck;
+		windowSaturation = topSent - p.id + 1;
 		if(windowSaturation < 0) {
 			windowSaturation = 0;
 //			System.err.println("wndSat is negative");
@@ -173,6 +189,17 @@ public class Flow {
 			
 			break;
 		case FAST_RECOVERY:
+/*//			retransmit(p.id, q);
+			window++;
+			topSent = maxAck - 1;
+			if(p.id > recoveryThreshold) {
+				window/=2;
+				windowThreshold = window;
+//				windowSaturation = window - 1;
+				changeState(State.COLLISION_AVOIDANCE);
+				break;
+			}*/
+			
 			if(p.id == lastAck) {
 				window++;
 				numAck++;
@@ -203,6 +230,7 @@ public class Flow {
 			if(numAck >= 3) {
 				numAck = 0;
 				retransmit(lastAck, q);
+				recoveryThreshold = topSent;
 				topSent = lastAck;
 				changeState(State.FAST_RECOVERY);
 			}
@@ -213,7 +241,8 @@ public class Flow {
 			Packet newp = getPacket();
 			if(newp != null) {
 				source.request(newp, q);
-				windowSaturation++;
+//				windowSaturation++;
+				windowSaturation = topSent - p.id + 1;
 			} else {
 				break;
 			}
@@ -299,8 +328,8 @@ public class Flow {
 										source.addr + "\t" + 
 										window + "\n");*/
 		
-		System.err.println("Timeout");
-		StreamManager.print("packet", "Timeout\n");
+//		System.err.println("Timeout");
+//		StreamManager.print("packet", "Timeout\n");
 		
 		if(windowThreshold != -1) {
 			windowThreshold /= 2;
@@ -378,7 +407,7 @@ public class Flow {
 			message = "COLLISION_AVOIDANCE";
 			break;
 		}
-		StreamManager.print("packet", message + "\n");
+//		StreamManager.print("packet", message + "\n");
 	}
 	
 	@Override
@@ -393,7 +422,12 @@ public class Flow {
 						packetSize + " " + 
 						congestionType + " " + 
 						dataAmt + " " + 
-						delay;
+						(int) delay;
 		return output;
+	}
+
+	public boolean entails(Host h) {
+		// TODO Auto-generated method stub
+		return source == h || dest == h;
 	}
 }

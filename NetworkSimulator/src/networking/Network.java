@@ -41,29 +41,35 @@ public class Network {
 		q = new PriorityQueue<Event>();
 	}
 	
-/*	public Network() {
+	public Network(ArrayList<Device> d, ArrayList<Link> l, ArrayList<Flow> f) {
 		time = -3;
 		
-		devices = new ArrayList<Device>();
-		links = new ArrayList<Link>();
-		flows = new ArrayList<Flow>();
+		devices = d;
+		links = l;
+		flows = f;
 		
 		q = new PriorityQueue<Event>();
-	}*/
+	}
 	
 	public void init() {
 		// Setup some streams
 		try {
-			PrintStream r_stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_routing.txt")));
-			StreamManager.addStream("routing", r_stream);
-			PrintStream p_stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_packet.txt")));
-			StreamManager.addStream("packet", p_stream);
+//			PrintStream r_stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_routing.txt")));
+//			StreamManager.addStream("routing", r_stream);
+//			PrintStream p_stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_packet.txt")));
+//			StreamManager.addStream("packet", p_stream);
+//			PrintStream t_stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_threshold.txt")));
+//			StreamManager.addStream("threshold", t_stream);
 			PrintStream w_stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_window.txt")));
 			StreamManager.addStream("window", w_stream);
-			PrintStream t_stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_threshold.txt")));
-			StreamManager.addStream("threshold", t_stream);
 			PrintStream b_stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_buffer.txt")));
 			StreamManager.addStream("buffer", b_stream);
+			PrintStream l_stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_link.txt")));
+			StreamManager.addStream("link", l_stream);
+			PrintStream f_stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_flow.txt")));
+			StreamManager.addStream("flow", f_stream);
+			PrintStream p_stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("output_loss.txt")));
+			StreamManager.addStream("loss", p_stream);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,18 +90,23 @@ public class Network {
 	
 	// returns true if anything happens
 	public boolean tick() {
-		if(!releveantQ()) {return false;}
+		if(!releveantQ()) {
+			for(Device dev : devices) {
+//				dev.printRoutingInfo();
+			}
+			return false;
+		}
 		Event e = q.peek();
 		currTime = e.endTime;
 //		logStatsEarly();
 		q.remove(e);
 		e.resolve(q);
 		logStats();
-/*		if(e.t == Event.Type.BFORD) {
+		if(e.t == Event.Type.BFORD) {
 			for(Device dev : devices) {
-				dev.printRoutingInfo();
+//				dev.printRoutingInfo();
 			}
-		}*/
+		}
 		return true;
 	}
 	

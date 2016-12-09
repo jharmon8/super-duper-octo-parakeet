@@ -52,7 +52,7 @@ public class Router extends Device {
 		}
 		
 		if(!p.isAck) {
-			StreamManager.print("routing", Network.currTime + "\t" + this.addr + "\n");
+//			StreamManager.print("routing", Network.currTime + "\t" + this.addr + "\n");
 		}
 		
 		route.addPacket(this, p, q);

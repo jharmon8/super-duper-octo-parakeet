@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
@@ -25,7 +26,7 @@ public class Link {
 	LinkedList<Device> sources = new LinkedList<Device>();
 	
 	LinkedList<MetricPair> metrics = new LinkedList<MetricPair>();
-	private double timeToConsider = 400;
+	private double timeToConsider = 1000;
 	
 	// The end time that the last packet will finish transmitting (no delay)
 	// Used when new packets are added to the buffer and need trans events
@@ -77,25 +78,32 @@ public class Link {
 	}
 	
 	public void addPacket(Device source, Packet p, PriorityQueue<Event> q) {
+		NumberFormat f = new DecimalFormat("#0.0000");
+		
 		Device dest = source == devices[0] ? devices[1] : devices[0];
 		double temp = buffer.isEmpty() ? Network.currTime : bufferEndTime;
 		
-		// maaaaaaan fuck that
-//		if(!dest.isHost()) {
-			int bufferSaturation = getBufferOccupancy();
-			if(bufferSaturation + p.size > maxSize) { 
-				System.err.println("packet dropped");
-				NumberFormat f = new DecimalFormat("#0.0000");
-				StreamManager.print("packet", f.format(Network.currTime) + "\t" + p.id + "\t" + "DROP\n");
-				return; 
-			}
-//		}
+		int bufferSaturation = getBufferOccupancy();
+		if(bufferSaturation + p.size > maxSize) { 
+//				System.err.println("packet dropped");
+//				NumberFormat f = new DecimalFormat("#0.0000");
+//				StreamManager.print("packet", f.format(Network.currTime) + "\t" + p.id + "\t" + "DROP\n");
+			f = new DecimalFormat("#0.0000");
+			StreamManager.print("loss", f.format(Network.currTime) + "\t" + this.toString() + "\t" + 1 + "\t" + "\n");
+			return; 
+		}
+		
+		StreamManager.print("loss", f.format(Network.currTime) + "\t" + this.toString() + "\t" + 0 + "\t" + "\n");
 		
 		double transTime = ((double)p.size / rate) * 1000;
 		if(!p.isRouting && !p.isAck) {
 			metric += p.size;
 //			System.out.println(metric);
 		}
+		
+		StreamManager.print("link", f.format(temp) + "\t" + this.toString() + "\t" + 1 + "\t" + "\n");
+		StreamManager.print("link", f.format(temp + transTime - .002) + "\t" + this.toString() + "\t" + 1 + "\t" + "\n");
+		StreamManager.print("link", f.format(temp + transTime - .001) + "\t" + this.toString() + "\t" + 0 + "\t" + "\n");
 		
 		// if this source is the same as the last packet
 		if(sources.size() == 0 || source != sources.get(sources.size() - 1)) {
@@ -183,6 +191,8 @@ public class Link {
 			);
 			q.add(e2);
 		}
+		
+		updateMetrics(Network.currTime, getBufferOccupancy());
 	}
 	
 	// bypass all the shit
@@ -200,16 +210,35 @@ public class Link {
 //		metric = 0;
 //		return metric + 1;
 //		return (int) ((double) bufferSaturation / rate) * 1000 + 1;
-		return getBufferOccupancy() + 1;
 		
-		/*int count = 0;
-		int total = 1;
+		updateMetrics(Network.currTime, getBufferOccupancy());
+		
+/*		double integral = 0;
+		double lastTime = Network.currTime - timeToConsider;
+		
 		for(MetricPair m : metrics) {
-			count++;
-			total+=m.m;
+			if(lastTime > m.time) {
+				System.err.println("Metric");
+				System.exit(1);
+			}
+			
+			integral+=m.m * (m.time - lastTime);
+			lastTime = m.time;
 		}
 		
-		return total / count;*/
+		return (int) (integral / timeToConsider + 1);*/
+		return getBufferOccupancy() + 1;
+		
+//		return 1;
+		
+/*		int test = 0;
+		for(Packet p : buffer) {
+			if(!p.isRouting) {
+				test++;
+			}
+		}
+		
+		return test + 1;*/
 	}
 	
 	public Device otherDevice(Device devIn) {

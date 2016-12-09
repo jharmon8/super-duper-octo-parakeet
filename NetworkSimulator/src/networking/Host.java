@@ -58,8 +58,8 @@ public class Host extends Device {
 	public void request(Packet p, PriorityQueue<Event> q) {
 		// TODO Auto-generated method stub
 		link.addPacket(this, p, q);
-		NumberFormat f = new DecimalFormat("#0.0000");
-		StreamManager.print("packet", f.format(Network.currTime) + "\t" + addr + "\t" + p.id + "\n");
+//		NumberFormat f = new DecimalFormat("#0.0000");
+//		StreamManager.print("packet", f.format(Network.currTime) + "\t" + addr + "\t" + p.id + "\n");
 	}
 
 	// this is really simple for hosts...
@@ -166,8 +166,8 @@ public class Host extends Device {
 		Packet p = received.get(0);
 		Packet ack = new Packet(ACK_SIZE, this, p.source, p.f, true, getAckId());
 		link.addPacket(this, ack, q);
-		NumberFormat f = new DecimalFormat("#0.0000");
-		StreamManager.print("packet", f.format(Network.currTime) + "\t" + addr + "\t" + ack.id + "\n");
+//		NumberFormat f = new DecimalFormat("#0.0000");
+//		StreamManager.print("packet", f.format(Network.currTime) + "\t" + addr + "\t" + ack.id + "\n");
 		return false;
 	}
 	

@@ -56,7 +56,12 @@ public class NetworkLoader {
 			case 1:
 				split = line.split(" ");
 				if(split[0].equals("1")) {
-					Device dev = new Host(split[1], split[2], split[3], split[4]);
+					Device dev = null;
+					if(split.length < 5) {
+						dev = new Host(split[1], split[2], split[3]);
+					} else {
+						dev = new Host(split[1], split[2], split[3], split[4]);
+					}
 					d.add(dev);
 				} else if(split[0].equals("2")) {
 					Device dev = new Router(split[1], split[2], split[3]);

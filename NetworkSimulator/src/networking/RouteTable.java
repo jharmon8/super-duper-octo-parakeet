@@ -79,7 +79,7 @@ public class RouteTable {
 	@Override
 	public String toString() {
 		String output = "";
-		output+=r.addr + "\n";
+		output+=r.addr + "\t" + Network.currTime + "\n";
 		for(TableEntry e : t) {
 			if(e.l == null) {
 				output += "\t" + e.addr + ", " + e.dist + "\t" + r.addr + "\n";
