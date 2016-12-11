@@ -84,6 +84,7 @@ public class LaunchPanel extends JPanel
 			} else if(e.getActionCommand().equals("0,2")) {
 				Network n = NetworkLoader.loadNetwork("Test_Case_2_Reno.txt");
 				NetworkViewer.launchViewer(n); 
+				n.init();
 				n.run();
 
 				System.out.println("Simulation finished.");
