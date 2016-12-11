@@ -5,6 +5,7 @@ import java.io.PrintStream;
 
 import generator.NetworkGenerator;
 import graphics.DesignerViewer;
+import graphics.Launcher;
 import graphics.NetworkViewer;
 import io.NetworkLoader;
 import networking.Network;
@@ -12,7 +13,7 @@ import networking.Network;
 
 public class TestDriver {
 	public static void main(String[] args) throws IOException {
-		testCase2();
+		Launcher.launch();
 	}
 
 	public static void testNetworkViewer() throws IOException {

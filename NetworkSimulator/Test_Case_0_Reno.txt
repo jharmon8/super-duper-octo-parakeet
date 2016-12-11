@@ -1,0 +1,24 @@
+t: -6
+# a: 64
+
+$
+
+1 1 100 100 H1
+1 2 400 100 H2
+
+$
+
+# Rates are always Bps
+# Latency is always ms
+# Buffer is always B
+1 2 1250000 10 64000
+
+$
+
+# Packet size is always bytes
+# congestion type => 0 is window (of one), 1 is Reno, 2 is FastTCP
+# Data amt is always B
+# delay in miliseconds
+1 2 1024 1 20000000 1000
+
+$

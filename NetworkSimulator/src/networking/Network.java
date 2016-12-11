@@ -195,4 +195,8 @@ public class Network {
 	public boolean saveNetwork(String filename) throws IOException {
 		return NetworkSaver.saveNetwork(devices, links, flows, filename);
 	}
+	
+	public void run() {
+		while(tick()) {}
+	}
 }

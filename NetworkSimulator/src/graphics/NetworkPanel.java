@@ -49,6 +49,7 @@ public class NetworkPanel extends JPanel implements KeyListener, ActionListener 
 	}
 
 	public void actionPerformed(ActionEvent ev) {
+//		System.out.println("repaint");
 		repaint();
 	}
 
