@@ -48,6 +48,7 @@ public class LaunchPanel extends JPanel
 		b = new JButton("Case 2: Fast");
 		b.addActionListener(this);
 		b.setActionCommand("1,2");
+		b.setEnabled(false);
 		this.add(b);	
 		b = new JButton("Custom");
 		b.addActionListener(this);
